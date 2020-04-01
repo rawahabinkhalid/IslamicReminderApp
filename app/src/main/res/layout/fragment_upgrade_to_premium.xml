@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileSettings.Fragment_upgrade_to_premium"
+    android:background="@drawable/i_app_background">
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:background="#904B4B4B">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingTop="20dp"
+            android:background="@drawable/curve_border_white_background">
+            <TextView
+                android:id="@+id/back_frag_upgradepremium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:drawableStart="@drawable/ic_keyboard_arrow_left_black_24dp"/>
+
+            <TextView
+                android:id="@+id/tips"
+                android:layout_below="@id/back_frag_upgradepremium"
+                android:text="@string/Tipsforsevendays"
+                android:textSize="26sp"
+                android:textColor="@color/onboarding_heading_color"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tips1"
+                android:layout_below="@id/tips"
+                android:text="@string/tip1"
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/onboarding_heading_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tips2"
+                android:layout_below="@id/tips1"
+                android:text="@string/tip2"
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/onboarding_heading_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tips3"
+                android:layout_below="@id/tips2"
+                android:text="@string/tip3"
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/onboarding_heading_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tips4"
+                android:layout_below="@id/tips3"
+                android:text="@string/tip4"
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/onboarding_heading_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/price"
+                android:layout_below="@id/tips4"
+                android:text="@string/price"
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                android:textColor="@color/onboarding_heading_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/upgrade_to_premium"
+                android:layout_below="@+id/price"
+                android:text="@string/Upgrade_premium"
+                android:textSize="16sp"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/curve_button_green"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="25dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>

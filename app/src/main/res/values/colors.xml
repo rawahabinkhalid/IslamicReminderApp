@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="dark_green">#113221</color>
+    <color name="light_grey">#9B9B9B</color>
+    <color name="onboarding_heading_color">#113221</color>
+    <color name="onbaording_heading_details_color">#4A4A4A</color>
+    <color name="input_underline_color">#979797</color>
+    <color name="input_header_color">#113221</color>
+    <color name="black_light">#4B4B4B</color>
+    <color name="pink">#FFCFB5</color>
+    <color name="inactive">#E6E6E6</color>
+    <color name="calender">#BFEFBB</color>
+    <color name="profile_email">#9B9B9B</color>
+    <color name="button_yellow">#FDFD96</color>
+    <color name="button_pink">#FFCFB5</color>
+    <color name="button_cyan">#BFEFBB</color>
+    <!-- dots inactive colors -->
+    <color name="dot_inactive_screen">#C2C2C2</color>
+    <!-- dots active colors -->
+    <color name="dot_active_screen">#EC8BC2</color>
+    <color name="dot_inactive_screen1">#C2C2C2</color>
+    <!-- dots active colors -->
+    <color name="dot_active_screen1">#EC8BC2</color>
+    <array name="array_dot_active">
+        <item>@color/dot_active_screen1</item>
+        <item>@color/dot_active_screen1</item>
+    </array>
+    <array name="array_dot_inactive">
+        <item>@color/dot_inactive_screen1</item>
+        <item>@color/dot_inactive_screen1</item>
+    </array>
+</resources>

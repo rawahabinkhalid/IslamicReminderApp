@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/i_app_background">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:background="#90E6F9E5">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingTop="20dp"
+            android:background="@drawable/curve_border_white_background">
+            <TextView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:drawableStart="@drawable/ic_keyboard_arrow_left_black_24dp"/>
+
+            <TextView
+                android:id="@+id/journal_heading"
+                android:layout_toRightOf="@id/back"
+                android:text="@string/Journal_of_shukar"
+                android:textSize="16sp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/onboarding_heading_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/journal_second_heading"
+                android:layout_below="@id/journal_heading"
+                android:text="@string/journal_second_heading"
+                android:textSize="20sp"
+                android:paddingLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/onboarding_heading_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_below="@+id/journal_second_heading"
+                android:id="@+id/journal_list"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100px">
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <Button
+                android:id="@+id/addjournal"
+                android:text="@string/add_journal"
+                android:textSize="16sp"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/curve_button_green"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="25dp"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

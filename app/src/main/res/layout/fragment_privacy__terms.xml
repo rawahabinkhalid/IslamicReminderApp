@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileSettings.Privacy_Terms"
+    android:background="@drawable/curve_border_white_background">
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/privacyTerms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        android:text="@string/privacy_terms">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_priacy_terms"
+        android:textColor="@android:color/black"
+        android:layout_width="match_parent"
+        android:lineHeight="30dp"
+        android:layout_below="@+id/privacyTerms"
+        android:textSize="18dp"
+        android:layout_margin="15dp"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+    <TextView
+        android:id="@+id/tv_priacy_terms1"
+        android:textColor="@android:color/black"
+        android:layout_width="match_parent"
+        android:lineHeight="30dp"
+        android:layout_below="@+id/tv_priacy_terms"
+        android:textSize="18dp"
+        android:layout_margin="15dp"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+    <TextView
+        android:id="@+id/tv_priacy_terms2"
+        android:textColor="@android:color/black"
+        android:layout_width="match_parent"
+        android:lineHeight="30dp"
+        android:layout_below="@+id/tv_priacy_terms1"
+        android:textSize="18dp"
+        android:layout_margin="15dp"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+    <TextView
+        android:id="@+id/tv_priacy_terms3"
+        android:textColor="@android:color/black"
+        android:layout_width="match_parent"
+        android:lineHeight="30dp"
+        android:layout_below="@+id/tv_priacy_terms2"
+        android:textSize="18dp"
+        android:layout_margin="15dp"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+    <TextView
+        android:id="@+id/tv_priacy_terms4"
+        android:textColor="@android:color/black"
+        android:layout_width="match_parent"
+        android:lineHeight="30dp"
+        android:layout_below="@+id/tv_priacy_terms3"
+        android:textSize="18dp"
+        android:layout_margin="15dp"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+
+</RelativeLayout>
+    </LinearLayout>
+  </ScrollView>

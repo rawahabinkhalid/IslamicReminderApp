@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/curve_border_white_background">
+
+    <TextView
+        android:id="@+id/main_heading"
+        android:layout_margin="20dp"
+        android:text="@string/onboarding_improve_collectively_heading"
+        android:textSize="20sp"
+        android:textColor="@color/onboarding_heading_color"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/details"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/main_heading"
+        android:text="@string/onboarding_together_cricle"
+        android:textSize="16sp"
+        android:textColor="@color/onbaording_heading_details_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/boarding_logo"
+        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/undraw_mindfulness_s"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/layoutDots"
+        android:layout_above="@+id/begin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:id="@+id/active_dot_1"
+            android:textSize="8sp"
+            android:background="@drawable/slider_dot_active"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp" />
+        <TextView
+            android:id="@+id/active_dot_2"
+            android:textSize="8sp"
+            android:background="@drawable/slider_dot_inactive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"/>
+        <TextView
+            android:id="@+id/active_dot_3"
+            android:textSize="8sp"
+            android:background="@drawable/slider_dot_inactive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/begin"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/curve_button_green"
+        android:text="@string/walk_throughscreen_button"/>
+</RelativeLayout>
