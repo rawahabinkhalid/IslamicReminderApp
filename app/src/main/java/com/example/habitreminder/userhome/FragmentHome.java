@@ -36,6 +36,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -62,8 +63,17 @@ public class FragmentHome extends Fragment  {
     public JournalAdapterHome desAdapters;
     public HabitsAdapter habitsAdapter;
     private RecyclerView myHabits_RV;
-
-
+    private TextView home_calender_heading;
+    private TextView record_heading;
+    private TextView total_perfect_days1;
+    private TextView record_current_streak;
+    private TextView your_best_streak;
+    private TextView total_habits_done;
+    private TextView reminder_heading;
+    private Button reminder_button;
+    private TextView journal_heading;
+    private TextView journal_tasks;
+    private Button journal_button;
 
     public FragmentHome(){
 
@@ -107,6 +117,20 @@ public class FragmentHome extends Fragment  {
         ll.setReverseLayout(true);
         myJournal_RV.setLayoutManager(ll);
 
+        home_calender_heading = rootview.findViewById(R.id.home_calender_heading);
+        record_heading = rootview.findViewById(R.id.record_heading);
+        total_perfect_days1 = rootview.findViewById(R.id.total_perfect_days1);
+        record_current_streak = rootview.findViewById(R.id.record_current_streak);
+        your_best_streak = rootview.findViewById(R.id.your_best_streak);
+        total_habits_done = rootview.findViewById(R.id.total_habits_done);
+        reminder_heading = rootview.findViewById(R.id.reminder_heading);
+        reminder_button = rootview.findViewById(R.id.reminder_button);
+        journal_heading = rootview.findViewById(R.id.journal_heading);
+        journal_tasks = rootview.findViewById(R.id.journal_tasks);
+        journal_button = rootview.findViewById(R.id.journal_button);
+
+
+        fetchStringResources();
 
          FirebaseFirestore db = FirebaseFirestore.getInstance();
          CollectionReference addJournalRef = db.collection("users");
@@ -236,5 +260,36 @@ public class FragmentHome extends Fragment  {
 
         return rootview;
     }
+
+    private void fetchStringResources() {
+        FirebaseFirestore dbMain = FirebaseFirestore.getInstance();
+        dbMain.collection("home")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null)
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    home_calender_heading.setText(String.valueOf(document.get("Calendar")));
+                                    record_heading.setText(String.valueOf(document.get("Record")));
+                                    total_perfect_days1.setText(String.valueOf(document.get("Record1")));
+                                    record_current_streak.setText(String.valueOf(document.get("Record2")));
+                                    your_best_streak.setText(String.valueOf(document.get("Record3")));
+                                    total_habits_done.setText(String.valueOf(document.get("Record4")));
+                                    reminder_heading.setText(String.valueOf(document.get("Reminder_Heading")));
+                                    reminder_button.setText(String.valueOf(document.get("Reminder_Button")));
+                                    journal_heading.setText(String.valueOf(document.get("Journal_Heading")));
+                                    journal_tasks.setText(String.valueOf(document.get("Journal_Subheading")));
+                                    journal_button.setText(String.valueOf(document.get("Journal_Button")));
+                                }
+                            } else {
+                                Log.d("TagJournal", "Error getting documents: ", task.getException());
+                            }
+                    }
+                });
+
+    }
+
 
 }

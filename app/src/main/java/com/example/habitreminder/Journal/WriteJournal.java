@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,12 +30,16 @@ import com.example.habitreminder.R;
 import com.example.habitreminder.userhome.FragmentHome;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -66,14 +72,14 @@ public class WriteJournal extends Fragment implements View.OnClickListener {
     private FirebaseUser CurrentUser = mAuth.getCurrentUser();
 
     private String userID;
-    private  ImageButton backButton;
+    private ImageButton backButton;
     private JournalAdapter desAdapter;
-
+    private TextView goBack_home;
+    private EditText write_journal;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
     }
@@ -81,7 +87,6 @@ public class WriteJournal extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         OnboardPreferenceManager oPm = new OnboardPreferenceManager(getContext());
-
 
         if (oPm.isGoogleSignIn()) {
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
@@ -97,12 +102,15 @@ public class WriteJournal extends Fragment implements View.OnClickListener {
         }
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_write_journal, container, false);
+        goBack_home = view.findViewById(R.id.goBack_home);
+        write_journal = view.findViewById(R.id.write_journal);
 
         myJournal_RV = (RecyclerView) view.findViewById(R.id.write_journal_rv);
         LinearLayoutManager ll = new LinearLayoutManager(activity);
         ll.setOrientation(LinearLayoutManager.VERTICAL);
         myJournal_RV.setLayoutManager(ll);
         journalDataList = new ArrayList<>();
+        fetchStringResources();
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference addJournalRef = db.collection("users/");
@@ -118,7 +126,7 @@ public class WriteJournal extends Fragment implements View.OnClickListener {
                     Log.d(" aaaaaa1", "" + list);
                     int counter = 0;
                     for (DocumentSnapshot d : list) {
-                       // Log.d("data" + counter++, d.toObject(JournalData.class).getjDescription());
+                        // Log.d("data" + counter++, d.toObject(JournalData.class).getjDescription());
                         JournalData p = d.toObject(JournalData.class);
                         journalDataList.add(p);
 
@@ -145,7 +153,7 @@ public class WriteJournal extends Fragment implements View.OnClickListener {
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle("Add Journal");
-                alertDialog.setPositiveButton(android.R.string.ok,null);
+                alertDialog.setPositiveButton(android.R.string.ok, null);
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 final Context context = inflater.getContext();
                 final LayoutInflater inflater1 = LayoutInflater.from(context);
@@ -207,9 +215,9 @@ public class WriteJournal extends Fragment implements View.OnClickListener {
         String strDate = "" + mdformat.format(calender.getTime());
         String jDescriptions = jDescription.getText().toString();
         Date d = Calendar.getInstance().getTime();
-        CharSequence s = DateFormat.format("MMMM d, yyyy ",d.getTime());
-        JournalData note = new JournalData(jDescriptions, s.toString(),timestamp);
-        Log.i("time" , String.valueOf(s));
+        CharSequence s = DateFormat.format("MMMM d, yyyy ", d.getTime());
+        JournalData note = new JournalData(jDescriptions, s.toString(), timestamp);
+        Log.i("time", String.valueOf(s));
 
         addJournalRefs.document(userID)
                 .collection("AddJournal").add(note);
@@ -252,5 +260,26 @@ public class WriteJournal extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void fetchStringResources() {
+        FirebaseFirestore dbMain = FirebaseFirestore.getInstance();
+        dbMain.collection("journal")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null)
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    goBack_home.setText(String.valueOf(document.get("Heading")));
+                                    write_journal.setText(String.valueOf(document.get("SubHeading")));
+                                }
+                            } else {
+                                Log.d("TagJournal", "Error getting documents: ", task.getException());
+                            }
+                    }
+                });
+
     }
 }

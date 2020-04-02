@@ -56,7 +56,6 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:paddingLeft="20dp"
-                android:text="@string/home_calender_heading"
                 android:textColor="@color/black_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -122,7 +121,6 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:paddingLeft="20dp"
-                android:text="@string/home_record_card_home"
                 android:textColor="@color/black_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -145,7 +143,6 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="25dp"
                         android:paddingTop="10dp"
-                        android:text="@string/home_record_heading_total_perfect_day"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -188,7 +185,6 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="25dp"
                         android:paddingTop="10dp"
-                        android:text="@string/current_streak"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -231,7 +227,6 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="25dp"
                         android:paddingTop="10dp"
-                        android:text="@string/your_best_streak"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -274,7 +269,6 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="25dp"
                         android:paddingTop="10dp"
-                        android:text="@string/total_habits_done"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -324,7 +318,6 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:paddingLeft="20dp"
-                android:text="@string/reminder_heading"
                 android:textColor="@color/black_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -342,7 +335,6 @@
                 android:layout_below="@+id/rv_habits"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/curve_button_green"
-                android:text="@string/reminder_card_button_text"
                 android:textSize="16sp" />
         </RelativeLayout>
 
@@ -365,7 +357,6 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:paddingLeft="20dp"
-                android:text="@string/journal_heading"
                 android:textColor="@color/black_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -383,7 +374,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/curve_white_background_with_black_border"
                     android:padding="10dp"
-                    android:text="@string/journal_tasks"
                     android:textColor="@color/black_light"
                     android:textSize="14sp" />
 
@@ -400,7 +390,6 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/curve_button_green"
-                android:text="@string/journal_card_button_text"
                 android:textSize="16sp" />
         </LinearLayout>
     </RelativeLayout>
