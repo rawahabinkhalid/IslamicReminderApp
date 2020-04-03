@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habitreminder.Data.Data;
@@ -28,6 +29,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +59,11 @@ public class FragmentProfile_and_Settings extends Fragment {
     Fragment_upgrade_to_premium upgrade;
     private RecyclerView explore_recycler_view;
     private RecyclerView setting_recycler_view;
+    private List<Profile_Settings_Model> profileExploreList = new ArrayList<>();
+    private List<Profile_Settings_Model> profileSettingList = new ArrayList<>();
+    private RecyclerView.Adapter Profile_Settings_Adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.LayoutManager layoutManager1;
 
     public FragmentProfile_and_Settings() {
         // Required empty public constructor
@@ -68,8 +80,18 @@ public class FragmentProfile_and_Settings extends Fragment {
         change_profile_name = Rootview.findViewById(R.id.change_profile_name);
         upgradetopremium = Rootview.findViewById(R.id.upgrade_to_premium);
         mMainFrame = (FrameLayout) Rootview.findViewById(R.id.mainFrame);
+
         explore_recycler_view = Rootview.findViewById(R.id.explore_recycler_view);
+        explore_recycler_view.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        explore_recycler_view.setLayoutManager(layoutManager);
+
         setting_recycler_view = Rootview.findViewById(R.id.setting_recycler_view);
+        setting_recycler_view.setHasFixedSize(true);
+        layoutManager1 = new LinearLayoutManager(getContext());
+        setting_recycler_view.setLayoutManager(layoutManager1);
+
+        getProfileSettingsData();
 
         privacyButton = (TextView) Rootview.findViewById(R.id.tv_priacy_terms);
         change_name = new Fragment_Change_name();
@@ -78,8 +100,6 @@ public class FragmentProfile_and_Settings extends Fragment {
         privacyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                Toast.makeText(getActivity(), "ok hai", Toast.LENGTH_SHORT).show();
                 Privacy_Terms privacy_terms = new Privacy_Terms();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
@@ -164,8 +184,13 @@ public class FragmentProfile_and_Settings extends Fragment {
     }
 
     private void getProfileSettingsData() {
+        getExploreData();
+        getSettingData();
+    }
+
+    private void getExploreData() {
         FirebaseFirestore dbMain = FirebaseFirestore.getInstance();
-        dbMain.collection("journal")
+        dbMain.collection("profile_settings").whereEqualTo("Type", "Explore")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -173,15 +198,47 @@ public class FragmentProfile_and_Settings extends Fragment {
                         if (task.getResult() != null)
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    goBack_home.setText(String.valueOf(document.get("Heading")));
-//                                    write_journal.setText(String.valueOf(document.get("SubHeading")));
+                                    String Description = String.valueOf(document.get("Description"));
+                                    String Name = String.valueOf(document.get("Name"));
+                                    String Status = String.valueOf(document.get("Status"));
+                                    String Type = String.valueOf(document.get("Type"));
+                                    Profile_Settings_Model tempModel = new Profile_Settings_Model(Name, Description, Status, Type);
+                                    profileExploreList.add(tempModel);
+
                                 }
+                                Profile_Settings_Adapter = new Profile_Settings_Adapter(getContext(), profileExploreList);
+                                explore_recycler_view.setAdapter(Profile_Settings_Adapter);
                             } else {
                                 Log.d("TagJournal", "Error getting documents: ", task.getException());
                             }
                     }
                 });
+    }
 
+    private void getSettingData() {
+        FirebaseFirestore dbMain = FirebaseFirestore.getInstance();
+        dbMain.collection("profile_settings").whereEqualTo("Type", "Setting")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null)
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String Description = String.valueOf(document.get("Description"));
+                                    String Name = String.valueOf(document.get("Name"));
+                                    String Status = String.valueOf(document.get("Status"));
+                                    String Type = String.valueOf(document.get("Type"));
+                                    Profile_Settings_Model tempModel = new Profile_Settings_Model(Name, Description, Status, Type);
+                                    profileSettingList.add(tempModel);
+                                }
+                                Profile_Settings_Adapter = new Profile_Settings_Adapter(getContext(), profileSettingList);
+                                setting_recycler_view.setAdapter(Profile_Settings_Adapter);
+                            } else {
+                                Log.d("TagJournal", "Error getting documents: ", task.getException());
+                            }
+                    }
+                });
     }
 }
 
