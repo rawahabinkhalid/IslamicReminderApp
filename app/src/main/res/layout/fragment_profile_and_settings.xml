@@ -220,10 +220,6 @@
                         android:src="@drawable/forward_profile" />
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1dp"
-                    android:background="@drawable/curve_grey_background" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/setting_recycler_view"
                     android:layout_width="match_parent"
