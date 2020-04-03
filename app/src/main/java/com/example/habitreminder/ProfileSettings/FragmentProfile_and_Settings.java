@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habitreminder.Data.Data;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
@@ -25,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +50,8 @@ public class FragmentProfile_and_Settings extends Fragment {
     private FrameLayout mMainFrame;
     Fragment_Change_name change_name;
     Fragment_upgrade_to_premium upgrade;
-
+    private RecyclerView explore_recycler_view;
+    private RecyclerView setting_recycler_view;
 
     public FragmentProfile_and_Settings() {
         // Required empty public constructor
@@ -58,12 +62,14 @@ public class FragmentProfile_and_Settings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View Rootview = null;
-        Rootview = inflater.inflate(R.layout.fragment_profile_and_settings, container,false);
+        Rootview = inflater.inflate(R.layout.fragment_profile_and_settings, container, false);
         userName = (TextView) Rootview.findViewById(R.id.user_name);
         userEmail = (TextView) Rootview.findViewById(R.id.user_email);
         change_profile_name = Rootview.findViewById(R.id.change_profile_name);
         upgradetopremium = Rootview.findViewById(R.id.upgrade_to_premium);
         mMainFrame = (FrameLayout) Rootview.findViewById(R.id.mainFrame);
+        explore_recycler_view = Rootview.findViewById(R.id.explore_recycler_view);
+        setting_recycler_view = Rootview.findViewById(R.id.setting_recycler_view);
 
         privacyButton = (TextView) Rootview.findViewById(R.id.tv_priacy_terms);
         change_name = new Fragment_Change_name();
@@ -97,15 +103,15 @@ public class FragmentProfile_and_Settings extends Fragment {
                 userName.setText(personName);
                 userEmail.setText(personEmail);
             }
-    } else if (oPm.isFacebookSignIn()) {
-        userName.setText("Welcome,\n Facebook user");
-    } else {
+        } else if (oPm.isFacebookSignIn()) {
+            userName.setText("Welcome,\n Facebook user");
+        } else {
             db = FirebaseFirestore.getInstance();
             mAuth = FirebaseAuth.getInstance();
 //            user = mAuth.getCurrentUser().getUid();
             personEmail = mAuth.getCurrentUser().getEmail();
             UID = mAuth.getCurrentUser().getUid();
-            Log.i("UID",UID);
+            Log.i("UID", UID);
             DocumentReference docRef = db.collection("users").document(UID);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -113,8 +119,8 @@ public class FragmentProfile_and_Settings extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Log.d("Data","DocumentSnapshot data: " + document.get("name"));
-                          personName = document.get("name").toString();
+                            Log.d("Data", "DocumentSnapshot data: " + document.get("name"));
+                            personName = document.get("name").toString();
                             userName.setText(personName);
                             userEmail.setText(personEmail);
 
@@ -131,9 +137,9 @@ public class FragmentProfile_and_Settings extends Fragment {
             FirebaseUser user_firebase = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-            dt.setUID(UID);
-            dt.setEmail(personEmail);
-            dt.setName(personName);
+        dt.setUID(UID);
+        dt.setEmail(personEmail);
+        dt.setName(personName);
 
         change_profile_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,11 +156,33 @@ public class FragmentProfile_and_Settings extends Fragment {
 
         return Rootview;
     }
-    public void changeProfileName(Fragment fragment){
+
+    public void changeProfileName(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.mainFrame,fragment);
+        fragmentTransaction.replace(R.id.mainFrame, fragment);
         fragmentTransaction.commit();
     }
+
+    private void getProfileSettingsData() {
+        FirebaseFirestore dbMain = FirebaseFirestore.getInstance();
+        dbMain.collection("journal")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null)
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    goBack_home.setText(String.valueOf(document.get("Heading")));
+//                                    write_journal.setText(String.valueOf(document.get("SubHeading")));
+                                }
+                            } else {
+                                Log.d("TagJournal", "Error getting documents: ", task.getException());
+                            }
+                    }
+                });
+
     }
+}
 
 

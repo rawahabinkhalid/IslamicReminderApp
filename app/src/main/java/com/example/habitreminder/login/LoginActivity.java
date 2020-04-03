@@ -92,27 +92,28 @@ public class LoginActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(emailCheck && passwordCheck){
+                if (emailCheck && passwordCheck) {
+//                    Log.d("MAUTH", "onCreate: " + userEmail + " - " + userPassword);
                     mAuth.signInWithEmailAndPassword(userEmail, userPassword)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    if( mAuth.getUid() != null){
-                                        db.collection("users").document(mAuth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                                prefManager.setUserData(documentSnapshot.get("name").toString(), documentSnapshot.get("email").toString(), documentSnapshot.get("account_type").toString());
-                                                redirectToHome();
-                                                finish();
-                                            }
-                                        });
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        if (mAuth.getUid() != null) {
+                                            db.collection("users").document(mAuth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                                    prefManager.setUserData(documentSnapshot.get("name").toString(), documentSnapshot.get("email").toString(), documentSnapshot.get("account_type").toString());
+                                                    redirectToHome();
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Authentication failed!.", Toast.LENGTH_SHORT).show();
                                     }
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "Authentication failed!.", Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        });
+                            });
                 }
             }
         });
@@ -126,39 +127,47 @@ public class LoginActivity extends AppCompatActivity {
 
         email.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(Patterns.EMAIL_ADDRESS.matcher(charSequence).matches()){
+                if (Patterns.EMAIL_ADDRESS.matcher(charSequence).matches()) {
                     email.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_black_24dp, 0);
                     emailCheck = true;
                     userEmail = charSequence.toString();
-                } else{
+                } else {
                     emailCheck = false;
                     email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
             }
+
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         password.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String pass = charSequence.toString().trim();
-                if(pass.length() >= 8 && pass.matches(".*\\d.*")){
+                if (pass.length() >= 8 && pass.matches(".*\\d.*")) {
                     password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_black_24dp, 0);
                     passwordCheck = true;
                     userPassword = charSequence.toString();
-                } else{
+                } else {
                     passwordCheck = false;
                     password.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
             }
+
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         google_login.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(_context, "ok", Toast.LENGTH_SHORT).show();
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile","email"));
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
             }
         });
 
@@ -192,8 +201,8 @@ public class LoginActivity extends AppCompatActivity {
                             Profile profile = Profile.getCurrentProfile();
                             String id = profile.getId();
                             String userID_for_facebook = profile.getId();
-                            Log.i("userID_for_facebook",userID_for_facebook);
-                            saveUserData(id, email, firstName+lastName, "FACEBOOK");
+                            Log.i("userID_for_facebook", userID_for_facebook);
+                            saveUserData(id, email, firstName + lastName, "FACEBOOK");
                             prefManager.setFacebookSignIn(true);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -207,7 +216,8 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancel() { }
+            public void onCancel() {
+            }
 
             @Override
             public void onError(FacebookException exception) {
@@ -224,17 +234,17 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 String userID_for_google = account.getId();
-                Log.i("userID_for_google ",userID_for_google);
+                Log.i("userID_for_google ", userID_for_google);
                 saveUserData(account.getId(), account.getEmail(), account.getDisplayName(), "GOOGLE");
                 prefManager.setGoogleSignIn(true);
             } catch (ApiException e) {
-                Toast.makeText(LoginActivity.this, "Some thing went wrong  " +e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Some thing went wrong  " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void saveUserData(final String id,final String email,final String name,final String type){
+    private void saveUserData(final String id, final String email, final String name, final String type) {
         DocumentReference userRef = db.collection("users").document(id);
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -254,28 +264,29 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void saveGoogleFacebookSigninUser(final String id,final String email,final String name,final String type){
+    private void saveGoogleFacebookSigninUser(final String id, final String email, final String name, final String type) {
         userData.put("email", email);
         userData.put("name", name);
         userData.put("user_id", id);
         userData.put("created_at", new Date());
         userData.put("account_type", type);
         db.collection("users").document(id).set(userData)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void v) {
-                    redirectToHome();
-                    finish();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) { }
-            });
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void v) {
+                        redirectToHome();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
     }
 
 
-    private void redirectToHome(){
+    private void redirectToHome() {
         prefManager.setUserLogin(true);
         startActivity(new Intent(_context, UserDashboardActivity.class));
         finish();

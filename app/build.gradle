@@ -31,7 +31,12 @@ android {
 repositories {
     maven { url 'https://jitpack.io' }
 }
-
+configurations {
+    all {
+        exclude module: 'httpclient'
+        exclude module: 'commons-logging'
+    }
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
