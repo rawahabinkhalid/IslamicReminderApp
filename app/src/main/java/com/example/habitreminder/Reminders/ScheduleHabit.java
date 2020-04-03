@@ -1,4 +1,4 @@
-package com.example.habitreminder.habits;
+package com.example.habitreminder.Reminders;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.habitreminder.R;
+import com.example.habitreminder.Reminders.AddCustomHabit;
 
 public class ScheduleHabit extends Fragment implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package com.example.habitreminder.habits;
+package com.example.habitreminder.Reminders;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.habitreminder.Data.HabitsData;
+import com.example.habitreminder.Data.ReminderData;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.example.habitreminder.userhome.FragmentHome;
@@ -118,9 +118,9 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener , T
         String strDate = "" + mdformat.format(calender.getTime());
 
         String title = habit_title.getText().toString();
-        HabitsData habitsData = new HabitsData(title, strDate);
-        Log.d("myData", habitsData.toString());
-        addHabitRef.document(userID).collection("AddHabits").add(habitsData);
+        ReminderData reminderData = new ReminderData(title, strDate);
+        Log.d("myData", reminderData.toString());
+        addHabitRef.document(userID).collection("AddHabits").add(reminderData);
 
 
     }

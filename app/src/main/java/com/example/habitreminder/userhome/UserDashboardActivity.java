@@ -17,10 +17,10 @@ import com.example.habitreminder.Journal.WriteJournal;
 import com.example.habitreminder.ProfileSettings.FragmentProfile_and_Settings;
 import com.example.habitreminder.Progress.FragmentProgress;
 import com.example.habitreminder.R;
-import com.example.habitreminder.habits.AddCustomHabit;
+import com.example.habitreminder.Reminders.AddCustomHabit;
 import com.example.habitreminder.habits.HabitSelectionActivityFrag;
-import com.example.habitreminder.habits.HealthHabitsFrag;
-import com.example.habitreminder.habits.ScheduleHabit;
+import com.example.habitreminder.habits.Subhabits_Fragment;
+import com.example.habitreminder.Reminders.ScheduleHabit;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -30,7 +30,7 @@ import java.security.GeneralSecurityException;
 public class UserDashboardActivity extends AppCompatActivity implements
         AddHabitFragment.OnFragmentInteractionListener,
         HabitSelectionActivityFrag.OnFragmentInteractionListener,
-        HealthHabitsFrag.OnFragmentInteractionListener,
+        Subhabits_Fragment.OnFragmentInteractionListener,
         AddCustomHabit.OnFragmentInteractionListener,
         ScheduleHabit.OnFragmentInteractionListener,
         WriteJournal.OnFragmentInteractionListener {

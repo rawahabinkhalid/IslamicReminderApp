@@ -1,6 +1,6 @@
 package com.example.habitreminder.Data;
 
-public class JournalData extends HabitsData {
+public class JournalData extends ReminderData {
 
     private String jDescription;
     private String dateJournal;

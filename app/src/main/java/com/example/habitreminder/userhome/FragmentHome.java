@@ -16,14 +16,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.habitreminder.Adapters.HabitsAdapter;
+import com.example.habitreminder.Adapters.ReminderAdapter;
 import com.example.habitreminder.Adapters.JournalAdapterHome;
-import com.example.habitreminder.Data.HabitsData;
+import com.example.habitreminder.Data.ReminderData;
 import com.example.habitreminder.Data.JournalData;
 import com.example.habitreminder.Journal.WriteJournal;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
-import com.example.habitreminder.habits.AddCustomHabit;
+import com.example.habitreminder.Reminders.AddCustomHabit;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,7 +53,7 @@ public class FragmentHome extends Fragment  {
     private RecyclerView.LayoutManager layoutManager;
 
     public List<JournalData> journalDataList;
-    public List<HabitsData> habitsDataList;
+    public List<ReminderData> reminderDataList;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private FirebaseUser CurrentUser = mAuth.getCurrentUser();
@@ -61,7 +61,7 @@ public class FragmentHome extends Fragment  {
    public String userID;
 
     public JournalAdapterHome desAdapters;
-    public HabitsAdapter habitsAdapter;
+    public ReminderAdapter reminderAdapter;
     private RecyclerView myHabits_RV;
     private TextView home_calender_heading;
     private TextView record_heading;
@@ -163,7 +163,7 @@ public class FragmentHome extends Fragment  {
 
 
 // load data reminder
-        habitsDataList = new ArrayList<>();
+        reminderDataList = new ArrayList<>();
         myHabits_RV = (RecyclerView) rootview.findViewById(R.id.rv_habits);
         LinearLayoutManager ll1 = new LinearLayoutManager(activity);
         ll1.setOrientation(LinearLayoutManager.VERTICAL);
@@ -183,18 +183,18 @@ public class FragmentHome extends Fragment  {
                     int counter = 0;
                     for (DocumentSnapshot d : list) {
 
-                        HabitsData p = d.toObject(HabitsData.class);
-                        habitsDataList.add(p);
+                        ReminderData p = d.toObject(ReminderData.class);
+                        reminderDataList.add(p);
 
                     }
                 } else {
                     Log.d("data2", queryDocumentSnapshots.toString());
                 }
 
-                habitsAdapter = new HabitsAdapter(getActivity(), habitsDataList);
+                reminderAdapter = new ReminderAdapter(getActivity(), reminderDataList);
 
-                myHabits_RV.setAdapter(habitsAdapter);
-                habitsAdapter.notifyDataSetChanged();
+                myHabits_RV.setAdapter(reminderAdapter);
+                reminderAdapter.notifyDataSetChanged();
             }
         });
         //add journal button

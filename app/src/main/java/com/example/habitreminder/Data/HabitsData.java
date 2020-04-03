@@ -1,30 +1,42 @@
 package com.example.habitreminder.Data;
 
+import java.util.List;
+
 public class HabitsData {
-    private  String  habit_title;
-    private String time;
+    private String Name;
+    private String Notification;
+    private List<SubHabits> subHabits;
 
     public HabitsData() {
     }
 
-    public HabitsData(String habit_title, String time) {
-        this.habit_title = habit_title;
-        this.time = time;
+    public HabitsData(String name, String notification, List<SubHabits> subHabits) {
+        Name = name;
+        Notification = notification;
+        this.subHabits = subHabits;
     }
 
-    public String getHabit_title() {
-        return habit_title;
+    public String getName() {
+        return Name;
     }
 
-    public void setHabit_title(String habit_title) {
-        this.habit_title = habit_title;
+    public void setName(String name) {
+        Name = name;
     }
 
-    public String getTime() {
-        return time;
+    public String getNotification() {
+        return Notification;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setNotification(String notification) {
+        Notification = notification;
+    }
+
+    public List<SubHabits> getSubHabits() {
+        return subHabits;
+    }
+
+    public void setSubHabits(List<SubHabits> subHabits) {
+        this.subHabits = subHabits;
     }
 }

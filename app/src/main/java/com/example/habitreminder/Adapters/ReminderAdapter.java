@@ -6,8 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.habitreminder.Data.HabitsData;
-import com.example.habitreminder.Data.JournalData;
+import com.example.habitreminder.Data.ReminderData;
 import com.example.habitreminder.R;
 
 import java.util.List;
@@ -15,15 +14,15 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.HabitViewHolder> {
+public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.HabitViewHolder> {
 
     Context mContx;
-    List<HabitsData> mData;
+    List<ReminderData> mData;
 
-    public HabitsAdapter() {
+    public ReminderAdapter() {
     }
 
-    public HabitsAdapter(Context mContx, List<HabitsData> mData) {
+    public ReminderAdapter(Context mContx, List<ReminderData> mData) {
         this.mContx = mContx;
         this.mData = mData;
     }
@@ -36,10 +35,10 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.HabitViewH
 
     @Override
     public void onBindViewHolder(@NonNull HabitViewHolder holder, int position) {
-       HabitsData habitsData =mData.get(position);
+       ReminderData reminderData =mData.get(position);
 
-       holder.habit_title.setText(habitsData.getHabit_title());
-       holder.time.setText(habitsData.getTime());
+       holder.habit_title.setText(reminderData.getHabit_title());
+       holder.time.setText(reminderData.getTime());
 
     }
 

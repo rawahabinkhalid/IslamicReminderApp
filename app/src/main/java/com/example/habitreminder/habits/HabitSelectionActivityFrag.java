@@ -1,5 +1,6 @@
 package com.example.habitreminder.habits;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,27 +13,55 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.habitreminder.Adapters.Main_Habits_Adapter;
+import com.example.habitreminder.Data.HabitsData;
+import com.example.habitreminder.Data.SubHabits;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.example.habitreminder.userhome.FragmentHome;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class HabitSelectionActivityFrag extends Fragment implements View.OnClickListener {
+    private Button saveData;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private CollectionReference addHabitRef;
+    private String userID;
+    private FirebaseFirestore db;
+    private RecyclerView myHabitsRv;
+    private List<HabitsData> myHabitslist;
+    private Main_Habits_Adapter myHabitsAdaper;
+
+
+    Activity activity;
+
+    public HabitSelectionActivityFrag(Activity activity) {
+        this.activity = activity;
+    }
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,35 +99,83 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    private FirebaseUser CurrentUser = mAuth.getCurrentUser();
-    private String userID;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //OnboardPreferenceManager oPm = new OnboardPreferenceManager(getContext());
+
+//        if (oPm.isGoogleSignIn()) {
+//            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+//            if (acct != null) {
+//                userID = acct.getId();
+//            }
+//        } else if (oPm.isFacebookSignIn()) {
+//
+//        } else {
+//            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//            userID = mAuth.getCurrentUser().getUid();
+//        }
         View view = inflater.inflate(R.layout.fragment_habit_selection_activity, container, false);
         ImageButton backButton = view.findViewById(R.id.backButton);
-        Button saveData = view.findViewById(R.id.saveData);
-
+        saveData = view.findViewById(R.id.saveData);
         backButton.setOnClickListener(this);
-//        TextView back = view.findViewById(R.id.goBack);
-//        back.setOnClickListener(this);
-        LinearLayout health = view.findViewById(R.id.health);
-        health.setOnClickListener(this);
-        saveData.setOnClickListener(this);
-        OnboardPreferenceManager oPm = new OnboardPreferenceManager(getContext());
-        if (oPm.isGoogleSignIn()) {
-            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-            if (acct != null) {
-                userID = acct.getId();
-            }
-        } else if (oPm.isFacebookSignIn()) {
+         saveData.setOnClickListener(this);
+        db = FirebaseFirestore.getInstance();
+        myHabitsRv = view.findViewById(R.id.rv_main_habits);
+        addHabitRef = db.collection("habits");
 
-        } else {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            userID = mAuth.getCurrentUser().getUid();
-        }
+        GridLayoutManager gl = new GridLayoutManager(getActivity() ,2);
+        gl.setOrientation(gl.VERTICAL);
+        myHabitsRv.setLayoutManager(gl);
+        myHabitslist = new ArrayList<>();
+
+        //addHabitRef =
+        db.collection("habits/").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<String> habitData = new ArrayList<>();
+                if(task.isSuccessful()){
+                    List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+
+                    for (DocumentSnapshot d :myListOfDocuments) {
+                        String name = d.getString("Name");
+
+
+                          habitData.add(name);
+                    }
+
+                }
+                myHabitsAdaper = new Main_Habits_Adapter(getActivity(), habitData);
+                myHabitsRv.setAdapter(myHabitsAdaper);
+                myHabitsAdaper.notifyDataSetChanged();
+            }
+        });
+
+
+       /* addHabitRef.document().collection("").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    Log.d("data1", queryDocumentSnapshots.toString());
+                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                    Log.d(" aaaaaa1", "" + list);
+                    int counter = 0;
+                    for (DocumentSnapshot d : list) {
+                        // Log.d("data" + counter++, d.toObject(JournalData.class).getjDescription());
+                        HabitsData p = d.toObject(HabitsData.class);
+                        myHabitslist.add(p);
+
+
+                    }
+                } else {
+                    Log.d("data2", queryDocumentSnapshots.toString());
+                }
+
+
+            }
+        });
+*/
         return view;
     }
 
@@ -117,19 +194,19 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
                         .commit();
 
                 break;
-            case R.id.health:
-                HealthHabitsFrag healthHabitsFrag = new HealthHabitsFrag();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
-                        .replace(R.id.mainFrame, healthHabitsFrag, "healthFragment")
-                        .addToBackStack("habitFragment")
-                        .commit();
-                break;
+//            case R.id.health:
+//                Subhabits_Fragment subhabitsFragment = new Subhabits_Fragment();
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
+//                        .replace(R.id.mainFrame, subhabitsFragment, "healthFragment")
+//                        .addToBackStack("habitFragment")
+//                        .commit();
+//                break;
             case R.id.saveData:
                // SaveData();
                 Toast.makeText(getActivity(), "Save Data", Toast.LENGTH_SHORT).show();
                 AddFrequency frequency = new AddFrequency();
-                getActivity().getSupportFragmentManager().beginTransaction()
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
                         .replace(R.id.mainFrame, frequency, "healthFragment")
                         .addToBackStack(null)
@@ -139,16 +216,7 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
         }
     }
 
-//    private void SaveData() {
-//        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        final CollectionReference AddHabitsData = db.collection("users/");
-//        AddHabitsData.document(userID).collection("MyHabits").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//            @Override
-//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//
-//            }
-//        });
-//    }
+
 
     @Override
     public void onAttach(Context context) {

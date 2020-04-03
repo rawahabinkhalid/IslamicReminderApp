@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.habitreminder.Journal.WriteJournal;
 import com.example.habitreminder.R;
-import com.example.habitreminder.habits.AddCustomHabit;
+import com.example.habitreminder.Reminders.AddCustomHabit;
 import com.example.habitreminder.habits.HabitSelectionActivityFrag;
 
 public class AddHabitFragment extends Fragment implements View.OnClickListener{

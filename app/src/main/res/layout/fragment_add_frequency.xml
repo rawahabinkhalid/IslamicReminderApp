@@ -22,7 +22,7 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
             <TextView
-                android:id="@+id/goBack_home"
+                android:id="@+id/heading_frequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/backButton"

@@ -1,222 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
     android:layout_marginBottom="0dp"
     android:background="@drawable/i_app_background"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:padding="20dp">
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/main_heading_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:background="@drawable/curve_border_white_background"
+        android:padding="20dp">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:padding="5dp"
+            android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
+
+        <TextView
+            android:id="@+id/heading_subTilte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/backButton"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/health_habits"
+            android:textColor="@color/input_header_color"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/select_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/backButton"
+            android:layout_marginTop="10dp"
+            android:text="@string/choose_habit_type"
+            android:textColor="@color/input_header_color" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_subHabits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_heading_layout"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/curve_border_white_background">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_sub_habits"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RelativeLayout
-                android:background="@drawable/curve_border_white_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp">
-                <ImageButton
-                    android:id="@+id/backButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
-                <TextView
-                    android:id="@+id/goBack_home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/backButton"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="@string/health_habits"
-                    android:textColor="@color/input_header_color"
-                    android:textSize="18sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp" />
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/select_from"
-                    android:layout_below="@+id/backButton"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/choose_habit_type"
-                    android:textColor="@color/input_header_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/curve_button_green"
+        android:text="@string/save"
+        android:textSize="18sp" />
 
-                <LinearLayout
-                    android:id="@+id/first_row"
-                    android:orientation="horizontal"
-                    android:layout_below="@+id/select_from"
-                    android:layout_marginTop="20dp"
-                    android:baselineAligned="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:id="@+id/takeVit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/write_habit_button">
-                        <ImageView
-                            android:id="@+id/image_take"
-                            android:src="@drawable/cross"
-                            android:layout_marginTop="20dp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:textColor="@color/input_header_color"
-                            android:text="@string/vitamins"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/fitness"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/write_habit_button">
-                        <ImageView
-                            android:src="@drawable/cross"
-                            android:layout_marginTop="20dp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:textColor="@color/input_header_color"
-                            android:text="@string/good_meal"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/second_row"
-                    android:orientation="horizontal"
-                    android:layout_below="@+id/first_row"
-                    android:layout_marginTop="20dp"
-                    android:baselineAligned="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:id="@+id/home"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/write_habit_button">
-                        <ImageView
-                            android:src="@drawable/cross"
-                            android:layout_marginTop="20dp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:textColor="@color/input_header_color"
-                            android:text="@string/brush"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/hobby"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/write_habit_button">
-                        <ImageView
-                            android:src="@drawable/cross"
-                            android:layout_marginTop="20dp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:textColor="@color/input_header_color"
-                            android:text="@string/sugar"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/third_row"
-                    android:orientation="horizontal"
-                    android:layout_below="@+id/second_row"
-                    android:layout_marginTop="20dp"
-                    android:baselineAligned="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:id="@+id/social"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/write_habit_button">
-                        <ImageView
-                            android:src="@drawable/cross"
-                            android:layout_marginTop="20dp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:textColor="@color/input_header_color"
-                            android:text="@string/caffeine"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/efficiency"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/write_habit_button">
-                        <ImageView
-                            android:src="@drawable/cross"
-                            android:layout_marginTop="20dp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:textColor="@color/input_header_color"
-                            android:text="@string/take_break"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
-            <Button
-                android:id="@+id/save"
-                android:layout_marginTop="20dp"
-                android:textSize="18sp"
-                android:text="@string/save"
-                android:background="@drawable/curve_button_green"
-                android:layout_width="match_parent"
-                android:layout_height="60dp" />
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+</RelativeLayout>
 
