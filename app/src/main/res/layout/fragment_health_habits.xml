@@ -5,7 +5,9 @@
     android:layout_marginBottom="0dp"
     android:background="@drawable/i_app_background"
     android:padding="20dp">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/main_heading_layout"
         android:layout_width="match_parent"
@@ -53,19 +55,18 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_sub_habits"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp" />
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/curve_button_green"
+            android:text="@string/save"
+            android:textSize="18sp" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/save"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/curve_button_green"
-        android:text="@string/save"
-        android:textSize="18sp" />
 
+    </RelativeLayout>
 </RelativeLayout>
 

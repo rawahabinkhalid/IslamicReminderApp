@@ -43,8 +43,12 @@ public class Sub_Habits_Adapter extends RecyclerView.Adapter<Sub_Habits_Adapter.
     @Override
     public void onBindViewHolder(@NonNull Main_habitsVH holder, final int position) {
         SubHabits habitsData = mData.get(position);
+//        if(habitsData.getName().contains(" "))
+//            holder.sub_habits_title.setText(habitsData.getName().split(" ")[1] + " ... " );
+//        else
+            holder.sub_habits_title.setText(habitsData.getName());
 
-        holder.sub_habits_title.setText(habitsData.getName());
+       // holder.sub_habits_title.setText(habitsData.getName());
         holder.sub_habit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
