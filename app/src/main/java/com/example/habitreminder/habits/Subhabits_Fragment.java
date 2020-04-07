@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.jar.Attributes;
 
 
-public class Subhabits_Fragment extends Fragment implements View.OnClickListener{
+public class Subhabits_Fragment extends Fragment implements View.OnClickListener {
 
 
     private FirebaseFirestore db;
@@ -95,7 +95,7 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_health_habits, container, false);
         ImageButton backbtn = view.findViewById(R.id.backButton);
         heading_subTilte = view.findViewById(R.id.heading_subTilte);
@@ -108,39 +108,40 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
         mysub_HabitsRv = view.findViewById(R.id.rv_sub_habits);
         addHabitRef = db.collection("habits");
 
-        GridLayoutManager gl = new GridLayoutManager(getActivity() ,2);
+        GridLayoutManager gl = new GridLayoutManager(getActivity(), 2);
         gl.setOrientation(gl.VERTICAL);
         mysub_HabitsRv.setLayoutManager(gl);
         myHabitslist = new ArrayList<>();
-        SharedPreferences sharedPreferences2 = this.getActivity().getSharedPreferences("Name",
+        SharedPreferences sharedPreferences2 = this.getActivity().getSharedPreferences("Name_main",
                 Context.MODE_PRIVATE);
-        final String documentName = sharedPreferences2.getString("name", "");
-//        Log.i("name_share" ,name);
+        final String documentName = sharedPreferences2.getString("name_main", "");
+        Log.i("name_main" ,documentName);
+
         heading_subTilte.setText(documentName);
         db.collection("habits/").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<HabitsData> habitData = new ArrayList<>();
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
 
-                    for (DocumentSnapshot d :myListOfDocuments) {
+                    for (DocumentSnapshot d : myListOfDocuments) {
                         String name = d.getString("Name");
-                        if(!name.equals(documentName)){
+                        if (!name.equals(documentName)) {
                             continue;
                         }
                         String notification = d.getString("Notification");
 
                         List<SubHabits> subHabits = new ArrayList<>();
-                        List<Map<String, Object>> s = (List<Map<String, Object>>)d.get("SubHabits");
-                        for(Map<String, Object> data: s){
+                        List<Map<String, Object>> s = (List<Map<String, Object>>) d.get("SubHabits");
+                        for (Map<String, Object> data : s) {
                             int frequencyAdvanced = Integer.parseInt(data.get("Frequency_Advanced").toString());
                             int frequency_Beginner = Integer.parseInt(data.get("Frequency_Beginner").toString());
                             int frequency_Intermediate = Integer.parseInt(data.get("Frequency_Intermediate").toString());
                             String sub_name = data.get("Name").toString();
                             String sub_notification = data.get("Notification").toString();
 
-                            subHabits.add(new SubHabits(frequencyAdvanced,frequency_Beginner,frequency_Intermediate,sub_name,sub_notification));
+                            subHabits.add(new SubHabits(frequencyAdvanced, frequency_Beginner, frequency_Intermediate, sub_name, sub_notification));
                         }
 
                         habitData.add(new HabitsData(name, notification, subHabits));
@@ -154,31 +155,20 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
         });
 
 
-
         return view;
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.backButton:
-               HabitSelectionActivityFrag backButton = new HabitSelectionActivityFrag();
+                HabitSelectionActivityFrag backButton = new HabitSelectionActivityFrag();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
                         .replace(R.id.mainFrame, backButton, "healthFragment")
                         .addToBackStack(null)
                         .commit();
                 break;
-//            case R.id.takeVit:
-//                Toast.makeText(getActivity(), "thek hai", Toast.LENGTH_SHORT).show();
-//                AddFrequency takeVitamin = new AddFrequency();
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
-//                        .replace(R.id.mainFrame, takeVitamin, "takevit")
-//                        .addToBackStack("takeVit")
-//                        .commit();
-//                break;
-
             case R.id.save:
                 AddFrequency takeVitamin = new AddFrequency();
                 getActivity().getSupportFragmentManager().beginTransaction()

@@ -1,6 +1,7 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main_container_habits"
     android:background="@drawable/i_app_background"
     android:padding="20dp">
 
@@ -14,6 +15,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/curve_border_white_background"
             android:padding="20dp">
+
             <ImageButton
                 android:id="@+id/backButton"
                 android:layout_width="wrap_content"
@@ -21,6 +23,7 @@
                 android:background="@android:color/white"
                 android:padding="5dp"
                 android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
+
             <TextView
                 android:id="@+id/heading_frequency"
                 android:layout_width="wrap_content"
@@ -32,30 +35,31 @@
                 android:textColor="@color/input_header_color"
                 android:textSize="18sp" />
         </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/write_habit"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="horizontal"
             android:layout_below="@+id/goBack"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="28sp"
+                android:layout_marginStart="10dp"
                 android:gravity="start"
                 android:padding="5dp"
-                android:textStyle="bold"
-                android:layout_marginStart="10dp"
                 android:text="@string/choosefrequency"
-                android:textColor="@color/input_header_color" />
+                android:textColor="@color/input_header_color"
+                android:textSize="28sp"
+                android:textStyle="bold" />
             >
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/first_row"
+            android:id="@+id/radio_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/select_from"
@@ -63,107 +67,48 @@
             android:baselineAligned="false"
             android:orientation="horizontal">
 
-            <RelativeLayout
-                android:id="@+id/health"
+            <RadioGroup
+                android:id="@+id/radio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:padding="10dp"
-                android:background="@drawable/write_habit_button">
+                >
 
-                <ImageView
-                    android:id="@+id/img_beginner"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/cross"
-                    android:layout_marginStart="20dp"/>
+                <RadioButton
+                    android:id="@+id/radio_beginner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/write_habit_button"
+                    android:checked="true"
+                    android:padding="20dp"
+                    android:buttonTint="@color/radio_button"
+                    android:textColor="@android:color/black"
+                    android:text="@string/beginner" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RadioButton
+                    android:id="@+id/radio_intermediate"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:padding="15dp"
-                    android:layout_toEndOf="@+id/img_beginner"
-                    android:text="@string/beginner"
-                    android:textColor="@color/input_header_color" />
-            </RelativeLayout>
+                    android:background="@drawable/write_habit_button"
+                    android:padding="20dp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginTop="15dp"
+                    android:buttonTint="@color/radio_button"
+                    android:text="@string/Intermediate" />
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/second_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/first_row"
-            android:layout_marginTop="20dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:id="@+id/health_one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:padding="10dp"
-                android:background="@drawable/write_habit_button">
-
-                <ImageView
-                    android:id="@+id/img_intermediate"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/cross"
-                    android:layout_marginStart="20dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <RadioButton
+                    android:id="@+id/radio_advance"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:padding="15dp"
-                    android:layout_toEndOf="@+id/img_intermediate"
-                    android:text="@string/Intermediate"
-                    android:textColor="@color/input_header_color" />
-            </RelativeLayout>
+                    android:textColor="@android:color/black"
+                    android:background="@drawable/write_habit_button"
+                    android:padding="20dp"
+                    android:buttonTint="@color/radio_button"
+                    android:drawablePadding="20dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/advanced" />
 
-
+            </RadioGroup>
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/third_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/select_from"
-            android:layout_marginTop="20dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:id="@+id/health_three"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:padding="10dp"
-                android:background="@drawable/write_habit_button">
-
-                <ImageView
-                    android:id="@+id/img_advance"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/cross"
-                    android:layout_marginStart="20dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:padding="15dp"
-                    android:layout_toEndOf="@+id/img_advance"
-                    android:text="@string/advanced"
-                    android:textColor="@color/input_header_color" />
-            </RelativeLayout>
-
-
-        </LinearLayout>
-
 
         <Button
             android:id="@+id/save"
@@ -174,4 +119,4 @@
             android:text="@string/save"
             android:textSize="18sp" />
     </LinearLayout>
-</ScrollView>
+</RelativeLayout>

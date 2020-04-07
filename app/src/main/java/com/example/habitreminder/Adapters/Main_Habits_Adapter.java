@@ -49,11 +49,11 @@ public class Main_Habits_Adapter extends RecyclerView.Adapter<Main_Habits_Adapte
         holder.habit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContx, "subchild", Toast.LENGTH_SHORT).show();
-                SharedPreferences companyId = ((FragmentActivity) mContx).getSharedPreferences("Name",
+
+                SharedPreferences companyId = ((FragmentActivity) mContx).getSharedPreferences("Name_main",
                         Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = companyId.edit();
-                editor.putString("name", mData.get(position));
+                editor.putString("name_main", mData.get(position));
                 editor.commit();
                 FragmentTransaction fragmentTransaction= ((FragmentActivity)mContx).getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_container_habits,new Subhabits_Fragment());
