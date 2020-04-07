@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "761573890326-0rr8k5dm8i0dn8fg0l0ato4scfaps4q9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "3201e388ba8e4670f3039e86383c5cfe8a56f233"
+          }
+        },
+        {
+          "client_id": "761573890326-rl18bfpfkjfcoji0np26c00ao891gq3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "4cdd05025da5baf7d80e22d927da6bf100a17fb0"
+          }
+        },
+        {
           "client_id": "761573890326-s9v442tn6dupfu4u5ep4rs410f44jfgh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -69,7 +85,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAw_xLuqhk6fOH_j5UCyZNCLA9uTx-q7Qc"
+          "current_key": "AIzaSyBIO65P3ox3LXvjSghK55i0VSyBnMCLCRs"
         }
       ],
       "services": {
@@ -78,6 +94,13 @@
             {
               "client_id": "761573890326-shj3jq8k9mfs8lv4h7obnfig5rqqhhtd.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "761573890326-3lvkkev4g1jm04k5b9un57ou9qfv53v7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "islamic-goals.Islamic-Goals"
+              }
             }
           ]
         }

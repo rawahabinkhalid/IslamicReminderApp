@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:layout_marginBottom="0dp"
+    android:background="@drawable/i_app_background"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="20dp"
+            android:background="@drawable/curve_border_white_background"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:id="@+id/backButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
+                <TextView
+                    android:id="@+id/goBack_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/backButton"
+                    android:text="@string/add_reminder"
+                    android:padding="5dp"
+                    android:textColor="@color/input_header_color"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+            <EditText
+                android:id="@+id/habit_title"
+                android:hint="@string/name_hint"
+                android:textSize="26sp"
+                android:textColor="@color/onbaording_heading_details_color"
+                android:backgroundTint="@color/input_underline_color"
+                android:textColorHint="@color/input_header_color"
+                android:layout_marginTop="20dp"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="20dp"
+                android:textSize="16sp"
+                android:text="@string/will_do_it"
+                android:textColor="@color/input_header_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/no_timer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/write_habit_button">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:drawableStart="@drawable/colors_box"
+                    android:drawablePadding="20dp"
+                    android:textColor="@color/input_header_color"
+                    android:text="@string/without_time"/>
+
+            </LinearLayout>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="@string/during"
+                android:textColor="@color/input_header_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/five_min"
+                    android:layout_weight="1"
+                    android:background="@drawable/write_habit_button"
+                    android:backgroundTint="@color/button_yellow"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="30dp"
+                    android:text="@string/five_min"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@color/input_header_color"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/ten_min"
+                    android:layout_weight="1"
+                    android:background="@drawable/write_habit_button"
+                    android:backgroundTint="@color/button_pink"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="30dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/ten_min"
+                    android:textColor="@color/input_header_color"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/half_hour"
+                    android:layout_weight="1"
+                    android:background="@drawable/write_habit_button"
+                    android:backgroundTint="@color/button_cyan"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="30dp"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/half_hour"
+                    android:textColor="@color/input_header_color"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/custom_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/write_habit_button">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:drawableStart="@drawable/colors_box"
+                    android:drawablePadding="20dp"
+                    android:textColor="@color/input_header_color"
+                    android:text="@string/custom_time"
+
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/save"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
+            android:text="@string/save"
+            android:background="@drawable/curve_button_green"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+    </LinearLayout>
+</ScrollView>
+

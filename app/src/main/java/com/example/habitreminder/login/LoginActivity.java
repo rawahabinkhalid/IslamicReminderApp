@@ -228,6 +228,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("userID_for_google ", "userID_for_google");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -239,6 +240,7 @@ public class LoginActivity extends AppCompatActivity {
                 prefManager.setGoogleSignIn(true);
             } catch (ApiException e) {
                 Toast.makeText(LoginActivity.this, "Some thing went wrong  " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.i("userID_for_google", String.valueOf(e));
             }
         }
         callbackManager.onActivityResult(requestCode, resultCode, data);

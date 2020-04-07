@@ -127,6 +127,7 @@
     <string name="caffeine">Limit caffeine</string>
     <string name="take_break">Take a break</string>
     <string name="add_habit">Add Habit</string>
+    <string name="add_reminder">Add Reminder</string>
     <string name="name_hint">Enter Name</string>
     <string name="will_do_it">I will do it</string>
     <string name="without_time">Without Timer</string>
