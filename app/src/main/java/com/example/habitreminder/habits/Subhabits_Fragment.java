@@ -50,7 +50,6 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
     private Sub_Habits_Adapter mySub_HabitsAdaper;
     private CollectionReference addHabitRef;
     private TextView heading_subTilte;
-    private Button save;
     Activity activity;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -99,11 +98,7 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_health_habits, container, false);
         ImageButton backbtn = view.findViewById(R.id.backButton);
         heading_subTilte = view.findViewById(R.id.heading_subTilte);
-        save = view.findViewById(R.id.save);
-        save.setOnClickListener(this);
         backbtn.setOnClickListener(this);
-        Button save = view.findViewById(R.id.save);
-        save.setOnClickListener(this);
         db = FirebaseFirestore.getInstance();
         mysub_HabitsRv = view.findViewById(R.id.rv_sub_habits);
         addHabitRef = db.collection("habits");
@@ -146,6 +141,7 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
 
                         habitData.add(new HabitsData(name, notification, subHabits));
                     }
+                    Log.i("Mylistof" , String.valueOf(myListOfDocuments));
 
                 }
                 mySub_HabitsAdaper = new Sub_Habits_Adapter(getActivity(), habitData.get(0).getSubHabits());
@@ -167,14 +163,6 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
                         .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
                         .replace(R.id.mainFrame, backButton, "healthFragment")
                         .addToBackStack(null)
-                        .commit();
-                break;
-            case R.id.save:
-                AddFrequency takeVitamin = new AddFrequency();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
-                        .replace(R.id.mainFrame, takeVitamin, "takevit")
-                        .addToBackStack("takeVit")
                         .commit();
                 break;
         }

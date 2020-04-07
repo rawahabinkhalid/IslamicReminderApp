@@ -64,17 +64,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_main_habits"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="30dp" />
-        <Button
-            android:id="@+id/saveData"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/curve_button_green"
-            android:text="@string/save"
-            android:textSize="18sp" />
+
 
     </RelativeLayout>
 

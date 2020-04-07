@@ -19,21 +19,29 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.habitreminder.Adapters.Sub_Habits_Adapter;
 import com.example.habitreminder.Data.AddFrequencyData;
+import com.example.habitreminder.Data.HabitsData;
 import com.example.habitreminder.Data.SubHabits;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.example.habitreminder.userhome.FragmentHome;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -45,13 +53,11 @@ public class AddFrequency extends Fragment {
     private ImageButton backButton;
     private Button save;
     private TextView heading_frequency;
-    private RadioButton radio_beginner, radio_intermediate, radio_advance;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String userID;
     private String subHabit_name, mainHabits_name;
-    private CollectionReference addHabits;
     private RadioGroup radioGroup;
+
 
     public AddFrequency() {
         // Required empty public constructor
@@ -67,6 +73,7 @@ public class AddFrequency extends Fragment {
         save = root.findViewById(R.id.save);
         heading_frequency = root.findViewById(R.id.heading_frequency);
         radioGroup = (RadioGroup) root.findViewById(R.id.radio);
+
 
 //        radio_beginner = root.findViewById(R.id.radio_beginner);
 //        radio_intermediate = root.findViewById(R.id.radio_intermediate);
@@ -108,6 +115,9 @@ public class AddFrequency extends Fragment {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             userID = mAuth.getCurrentUser().getUid();
         }
+
+
+
         addListenerOnButton();
         return root;
     }
@@ -119,13 +129,12 @@ public class AddFrequency extends Fragment {
             public void onClick(View v) {
                 // get selected radio button from radioGroup
                 int selectedId = radioGroup.getCheckedRadioButtonId();
-
-                if (selectedId == 2131296596) {
-                    Toast.makeText(getActivity(), "selected Intermediate", Toast.LENGTH_SHORT).show();
-                    addNote_Intermediate();
-                } else if (selectedId == 2131296595) {
+                if (selectedId == 2131296595) {
                     Toast.makeText(getActivity(), "selected Beginner", Toast.LENGTH_SHORT).show();
                     addNote_Beginner();
+                } else if (selectedId == 2131296596) {
+                    Toast.makeText(getActivity(), "selected Intermediate", Toast.LENGTH_SHORT).show();
+                    addNote_Intermediate();
                 } else {
                     Toast.makeText(getActivity(), "selected Advance", Toast.LENGTH_SHORT).show();
                     addNote_Advance();
@@ -147,7 +156,7 @@ public class AddFrequency extends Fragment {
         map.put("advance", "3");
 //        AddFrequencyData addHabits = new AddFrequencyData();
 
-        db.collection("users").document(userID).collection("AddHibits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("users").document(userID).collection("UserHibits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "onSuccess : task was successful");
@@ -171,7 +180,7 @@ public class AddFrequency extends Fragment {
         map.put("subHabitsName", subHabit_name);
         map.put("habitName", mainHabits_name);
         map.put("beginner", "1");
-        db.collection("users").document(userID).collection("AddHibits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("users").document(userID).collection("UserHibits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "onSuccess : task was successful");
@@ -197,7 +206,7 @@ public class AddFrequency extends Fragment {
         map.put("intermediate", "2");
 //        AddFrequencyData addHabits = new AddFrequencyData();
 
-        db.collection("users").document(userID).collection("AddHibits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("users").document(userID).collection("UserHibits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "onSuccess : task was successful");

@@ -46,7 +46,6 @@ import java.util.Objects;
 
 
 public class HabitSelectionActivityFrag extends Fragment implements View.OnClickListener {
-    private Button saveData;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private CollectionReference addHabitRef;
     private String userID;
@@ -118,13 +117,10 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
 //        }
         View view = inflater.inflate(R.layout.fragment_habit_selection_activity, container, false);
         ImageButton backButton = view.findViewById(R.id.backButton);
-        saveData = view.findViewById(R.id.saveData);
         backButton.setOnClickListener(this);
-         saveData.setOnClickListener(this);
         db = FirebaseFirestore.getInstance();
         myHabitsRv = view.findViewById(R.id.rv_main_habits);
         addHabitRef = db.collection("habits");
-
         GridLayoutManager gl = new GridLayoutManager(getActivity() ,2);
         gl.setOrientation(gl.VERTICAL);
         myHabitsRv.setLayoutManager(gl);
@@ -153,29 +149,7 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
         });
 
 
-       /* addHabitRef.document().collection("").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    Log.d("data1", queryDocumentSnapshots.toString());
-                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                    Log.d(" aaaaaa1", "" + list);
-                    int counter = 0;
-                    for (DocumentSnapshot d : list) {
-                        // Log.d("data" + counter++, d.toObject(JournalData.class).getjDescription());
-                        HabitsData p = d.toObject(HabitsData.class);
-                        myHabitslist.add(p);
 
-
-                    }
-                } else {
-                    Log.d("data2", queryDocumentSnapshots.toString());
-                }
-
-
-            }
-        });
-*/
         return view;
     }
 
@@ -194,25 +168,6 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
                         .commit();
 
                 break;
-//            case R.id.health:
-//                Subhabits_Fragment subhabitsFragment = new Subhabits_Fragment();
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
-//                        .replace(R.id.mainFrame, subhabitsFragment, "healthFragment")
-//                        .addToBackStack("habitFragment")
-//                        .commit();
-//                break;
-            case R.id.saveData:
-               // SaveData();
-                Toast.makeText(getActivity(), "Save Data", Toast.LENGTH_SHORT).show();
-                AddFrequency frequency = new AddFrequency();
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
-                        .replace(R.id.mainFrame, frequency, "healthFragment")
-                        .addToBackStack(null)
-                        .commit();
-                break;
-
         }
     }
 
