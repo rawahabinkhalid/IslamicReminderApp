@@ -52,7 +52,6 @@ public class Sub_Habits_Adapter extends RecyclerView.Adapter<Sub_Habits_Adapter.
         holder.sub_habit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContx, "subchild", Toast.LENGTH_SHORT).show();
                 SharedPreferences companyId = ((FragmentActivity) mContx).getSharedPreferences("Name",
                         Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = companyId.edit();
@@ -61,6 +60,7 @@ public class Sub_Habits_Adapter extends RecyclerView.Adapter<Sub_Habits_Adapter.
                 FragmentTransaction fragmentTransaction= ((FragmentActivity)mContx).getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_container_habits,new AddFrequency());
                 fragmentTransaction.commit();
+
             }
         });
     }
