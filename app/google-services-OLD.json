@@ -1,0 +1,88 @@
+{
+  "project_info": {
+    "project_number": "761573890326",
+    "firebase_url": "https://islamicapp-245510.firebaseio.com",
+    "project_id": "islamicapp-245510",
+    "storage_bucket": "islamicapp-245510.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761573890326:android:404c5195064d5da5",
+        "android_client_info": {
+          "package_name": "com.example.habitreminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761573890326-s9v442tn6dupfu4u5ep4rs410f44jfgh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "1f92cb2be13ce3460d33b02e1f6dd5ed5af9443c"
+          }
+        },
+        {
+          "client_id": "761573890326-lu3s68mfr6p38aede3s2s62mdsjaj356.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "a1573bdfee0fd92337e701da320d9499b65f93ba"
+          }
+        },
+        {
+          "client_id": "761573890326-u31oq7qovq1hbg8ik0jgn611k3spofsk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "61380f7529173a5253dd205d834263adacfb6871"
+          }
+        },
+        {
+          "client_id": "761573890326-k9teccnlenlg6r20smb17vaq2hbvasii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "f77e6d2b27cc7b552c51a5104efeb0d31e438e12"
+          }
+        },
+        {
+          "client_id": "761573890326-7smhcjgrprqm9b5lrrfm2r6t9dpvrptb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "a20d4339f161c5782959ddfbfd4817718277542a"
+          }
+        },
+        {
+          "client_id": "761573890326-if1m0bsr5i582ot26bklkojh72l6l4i9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.habitreminder",
+            "certificate_hash": "4104d435911a246b3acd2a84c388d719d102129f"
+          }
+        },
+        {
+          "client_id": "761573890326-shj3jq8k9mfs8lv4h7obnfig5rqqhhtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw_xLuqhk6fOH_j5UCyZNCLA9uTx-q7Qc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761573890326-shj3jq8k9mfs8lv4h7obnfig5rqqhhtd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
