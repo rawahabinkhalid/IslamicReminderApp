@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1023238974434",
+    "firebase_url": "https://islamicgoals-5f9bc.firebaseio.com",
+    "project_id": "islamicgoals-5f9bc",
+    "storage_bucket": "islamicgoals-5f9bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023238974434:android:b809757e15047522f6e7bb",
+        "android_client_info": {
+          "package_name": "com.example.habitreminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023238974434-h5cms83tlja97qp8cjdmicpfok82p0co.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK-V3Haz1IizkppTxy_AP942W_u9PAuDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023238974434-h5cms83tlja97qp8cjdmicpfok82p0co.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
