@@ -70,4 +70,8 @@ dependencies {
     }
     implementation 'com.applandeo:material-calendar-view:1.4.0'
     implementation 'com.github.alamkanak:android-week-view:1.2.6'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.5'
+    implementation 'androidx.work:work-runtime:2.1.0'
+
 }

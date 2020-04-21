@@ -3,17 +3,24 @@ package com.example.habitreminder.Data;
 import java.util.List;
 
 public class HabitsData {
+    private String Key;
     private String Name;
     private String Notification;
     private List<SubHabits> subHabits;
 
-    public HabitsData() {
-    }
-
-    public HabitsData(String name, String notification, List<SubHabits> subHabits) {
+    public HabitsData(String key, String name, String notification, List<SubHabits> subHabits) {
+        Key = key;
         Name = name;
         Notification = notification;
         this.subHabits = subHabits;
+    }
+
+    public String getKey() {
+        return Key;
+    }
+
+    public void setKey(String key) {
+        Key = key;
     }
 
     public String getName() {

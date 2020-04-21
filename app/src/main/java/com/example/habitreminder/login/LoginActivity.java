@@ -2,6 +2,7 @@ package com.example.habitreminder.login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
@@ -45,6 +47,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.type.LatLng;
 
 import org.json.JSONException;
@@ -69,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private LatLng myLatLng;
     private static final int REQ_CODE = 9001;
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +108,9 @@ public class LoginActivity extends AppCompatActivity {
                                             db.collection("users").document(mAuth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                                    prefManager.setUserData(documentSnapshot.get("name").toString(), documentSnapshot.get("email").toString(), documentSnapshot.get("account_type").toString());
+                                                    Log.i("MY_UID", mAuth.getUid());
+                                                    setFirebaseToken(mAuth.getUid());
+                                                    prefManager.setUserData(mAuth.getUid(), documentSnapshot.get("name").toString(), documentSnapshot.get("email").toString(), documentSnapshot.get("account_type").toString());
                                                     redirectToHome();
                                                     finish();
                                                 }
@@ -272,6 +279,7 @@ public class LoginActivity extends AppCompatActivity {
         userData.put("user_id", id);
         userData.put("created_at", new Date());
         userData.put("account_type", type);
+        setFirebaseToken(id);
         db.collection("users").document(id).set(userData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -283,6 +291,50 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+
+
+    private void setFirebaseToken(final String id) {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        DocumentReference dbRef = db.collection("users").document(id);
+
+                        dbRef
+                                .update("token", token)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
+
+                        // Log and toast
+                        String msg = "InstanceID Token: " + token;
+                        SharedPreferences companyId = ((FragmentActivity) _context).getSharedPreferences("Token",
+                                Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = companyId.edit();
+                        editor.putString("token", token);
+                        editor.commit();
+
+                        Log.d(TAG, msg);
+                        Toast.makeText(_context, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -1,30 +1,40 @@
 package com.example.habitreminder.Data;
 
 public class ReminderData {
-    private  String  habit_title;
-    private String time;
+    private  String  Name;
+    private String TypeOfReminder;
+    private String Time;
 
     public ReminderData() {
     }
 
-    public ReminderData(String habit_title, String time) {
-        this.habit_title = habit_title;
-        this.time = time;
+    public ReminderData(String name, String typeOfReminder, String time) {
+        Name = name;
+        TypeOfReminder = typeOfReminder;
+        Time = time;
     }
 
-    public String getHabit_title() {
-        return habit_title;
+    public String getName() {
+        return Name;
     }
 
-    public void setHabit_title(String habit_title) {
-        this.habit_title = habit_title;
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getTypeOfReminder() {
+        return TypeOfReminder;
+    }
+
+    public void setTypeOfReminder(String typeOfReminder) {
+        TypeOfReminder = typeOfReminder;
     }
 
     public String getTime() {
-        return time;
+        return Time;
     }
 
     public void setTime(String time) {
-        this.time = time;
+        Time = time;
     }
 }

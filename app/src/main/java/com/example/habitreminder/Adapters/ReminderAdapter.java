@@ -37,7 +37,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.HabitV
     public void onBindViewHolder(@NonNull HabitViewHolder holder, int position) {
        ReminderData reminderData =mData.get(position);
 
-       holder.habit_title.setText(reminderData.getHabit_title());
+       holder.habit_title.setText(reminderData.getName());
        holder.time.setText(reminderData.getTime());
 
     }

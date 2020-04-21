@@ -88,8 +88,7 @@
                 <Button
                     android:id="@+id/five_min"
                     android:layout_weight="1"
-                    android:background="@drawable/write_habit_button"
-                    android:backgroundTint="@color/button_yellow"
+                    android:background="@drawable/five_min_button"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:paddingTop="30dp"
                     android:paddingBottom="30dp"
@@ -101,8 +100,7 @@
                 <Button
                     android:id="@+id/ten_min"
                     android:layout_weight="1"
-                    android:background="@drawable/write_habit_button"
-                    android:backgroundTint="@color/button_pink"
+                    android:background="@drawable/ten_min_button"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:paddingTop="30dp"
                     android:paddingBottom="30dp"
@@ -115,8 +113,7 @@
                 <Button
                     android:id="@+id/half_hour"
                     android:layout_weight="1"
-                    android:background="@drawable/write_habit_button"
-                    android:backgroundTint="@color/button_cyan"
+                    android:background="@drawable/half_hour_button"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:paddingTop="30dp"
                     android:paddingBottom="30dp"

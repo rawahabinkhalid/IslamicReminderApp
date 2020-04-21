@@ -36,7 +36,8 @@ public class Sub_Habits_Adapter extends RecyclerView.Adapter<Sub_Habits_Adapter.
 
     @Override
     public Main_habitsVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(mContx).inflate(R.layout.sub_habits_layouts ,parent , false);
+//        View rootView = LayoutInflater.from(mContx).inflate(R.layout.sub_habits_layouts ,parent , false);
+        View rootView = LayoutInflater.from(mContx).inflate(R.layout.main_habits_layouts ,parent , false);
         return  new Main_habitsVH(rootView);
     }
 
@@ -52,10 +53,20 @@ public class Sub_Habits_Adapter extends RecyclerView.Adapter<Sub_Habits_Adapter.
         holder.sub_habit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences companyId = ((FragmentActivity) mContx).getSharedPreferences("Name",
+//                SharedPreferences companyId = ((FragmentActivity) mContx).getSharedPreferences("Name",
+//                        Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = companyId.edit();
+//                editor.putString("name", mData.get(position).getName());
+//                editor.commit();
+                SharedPreferences companyId = ((FragmentActivity) mContx).getSharedPreferences("Name_main",
                         Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = companyId.edit();
-                editor.putString("name", mData.get(position).getName());
+                editor.putString("sub_name_main", mData.get(position).getName());
+                editor.putString("sub_index_main", mData.get(position).getIndex());
+                editor.putString("sub_notification_main", mData.get(position).getNotification());
+                editor.putString("Frequency_Advanced", String.valueOf(mData.get(position).getFrequency_Advanced()));
+                editor.putString("Frequency_Beginner", String.valueOf(mData.get(position).getFrequency_Beginner()));
+                editor.putString("Frequency_Intermediate", String.valueOf(mData.get(position).getFrequency_Intermediate()));
                 editor.commit();
                 FragmentTransaction fragmentTransaction= ((FragmentActivity)mContx).getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_container_habits,new AddFrequency());
@@ -75,8 +86,8 @@ public class Sub_Habits_Adapter extends RecyclerView.Adapter<Sub_Habits_Adapter.
         private LinearLayout sub_habit_layout;
         public Main_habitsVH(@NonNull View itemView) {
             super(itemView);
-            sub_habits_title  = itemView.findViewById(R.id.sub_habits_title);
-            sub_habit_layout = itemView.findViewById(R.id.sub_habit_layout);
+            sub_habits_title  = itemView.findViewById(R.id.habits_title);
+            sub_habit_layout = itemView.findViewById(R.id.habit_layout);
         }
 
     }

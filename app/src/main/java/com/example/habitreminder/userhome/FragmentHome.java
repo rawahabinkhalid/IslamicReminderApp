@@ -173,7 +173,7 @@ public class FragmentHome extends Fragment  {
         CollectionReference addHabits = db.collection("users");
 
 
-     addHabits.document(userID).collection("AddHabits").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+     addHabits.document(userID).collection("AddReminder").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()) {

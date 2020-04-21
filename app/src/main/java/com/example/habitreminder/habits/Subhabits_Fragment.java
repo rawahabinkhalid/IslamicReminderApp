@@ -46,11 +46,13 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
 
     private FirebaseFirestore db;
     private RecyclerView mysub_HabitsRv;
-    private List<HabitsData> myHabitslist;
+    //    private List<HabitsData> myHabitslist;
+    private List<SubHabits> subHabits = new ArrayList<>();
     private Sub_Habits_Adapter mySub_HabitsAdaper;
     private CollectionReference addHabitRef;
     private TextView heading_subTilte;
     private Button save;
+
     Activity activity;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -111,44 +113,55 @@ public class Subhabits_Fragment extends Fragment implements View.OnClickListener
         GridLayoutManager gl = new GridLayoutManager(getActivity(), 2);
         gl.setOrientation(gl.VERTICAL);
         mysub_HabitsRv.setLayoutManager(gl);
-        myHabitslist = new ArrayList<>();
+//        myHabitslist = new ArrayList<>();
         SharedPreferences sharedPreferences2 = this.getActivity().getSharedPreferences("Name_main",
                 Context.MODE_PRIVATE);
         final String documentName = sharedPreferences2.getString("name_main", "");
-        Log.i("name_main" ,documentName);
+        final String documentKey = sharedPreferences2.getString("key_main", "");
+        Log.i("name_main", documentName);
 
         heading_subTilte.setText(documentName);
-        db.collection("habits/").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("habits/").document(documentKey).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<HabitsData> habitData = new ArrayList<>();
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                List<HabitsData> habitData = new ArrayList<>();
                 if (task.isSuccessful()) {
-                    List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
-
-                    for (DocumentSnapshot d : myListOfDocuments) {
-                        String name = d.getString("Name");
-                        if (!name.equals(documentName)) {
-                            continue;
-                        }
-                        String notification = d.getString("Notification");
-
-                        List<SubHabits> subHabits = new ArrayList<>();
+                    DocumentSnapshot d = task.getResult();
+//                    Log.i("subHabitsData", String.valueOf(d));
+//                    Log.i("subHabitsData", String.valueOf(d.get("SubHabits")));
+//                    List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+//
+//                    for (DocumentSnapshot d : myListOfDocuments) {
+//                    String name = d.getString("Name");
+//                        if (!name.equals(documentName)) {
+//                            continue;
+//                        }
+//                    String notification = d.getString("Notification");
+                    try {
                         List<Map<String, Object>> s = (List<Map<String, Object>>) d.get("SubHabits");
+                        int index = 0;
                         for (Map<String, Object> data : s) {
+//                            Log.i("subHabitsData", String.valueOf(data));
                             int frequencyAdvanced = Integer.parseInt(data.get("Frequency_Advanced").toString());
                             int frequency_Beginner = Integer.parseInt(data.get("Frequency_Beginner").toString());
                             int frequency_Intermediate = Integer.parseInt(data.get("Frequency_Intermediate").toString());
                             String sub_name = data.get("Name").toString();
                             String sub_notification = data.get("Notification").toString();
 
-                            subHabits.add(new SubHabits(frequencyAdvanced, frequency_Beginner, frequency_Intermediate, sub_name, sub_notification));
+                            subHabits.add(new SubHabits(frequencyAdvanced, frequency_Beginner, frequency_Intermediate, String.valueOf(index), sub_name, sub_notification));
+                            index++;
                         }
+                        Log.i("subHabitsData", String.valueOf(subHabits));
+//                    habitData.add(new HabitsData(d.getId(), name, notification, subHabits));
 
-                        habitData.add(new HabitsData(name, notification, subHabits));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
                 }
-                mySub_HabitsAdaper = new Sub_Habits_Adapter(getActivity(), habitData.get(0).getSubHabits());
+
+//                }
+//                Log.i("subHabitsData", String.valueOf(habitData));
+                mySub_HabitsAdaper = new Sub_Habits_Adapter(getActivity(), subHabits);
                 mysub_HabitsRv.setAdapter(mySub_HabitsAdaper);
                 mySub_HabitsAdaper.notifyDataSetChanged();
             }

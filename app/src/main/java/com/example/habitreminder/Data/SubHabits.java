@@ -4,16 +4,15 @@ public class SubHabits {
     private int Frequency_Advanced;
     private int Frequency_Beginner;
     private int Frequency_Intermediate;
+    private String Index;
     private String Name;
     private String Notification;
 
-    public SubHabits() {
-    }
-
-    public SubHabits(int frequency_Advanced, int frequency_Beginner, int frequency_Intermediate, String name, String notification) {
+    public SubHabits(int frequency_Advanced, int frequency_Beginner, int frequency_Intermediate, String index, String name, String notification) {
         Frequency_Advanced = frequency_Advanced;
         Frequency_Beginner = frequency_Beginner;
         Frequency_Intermediate = frequency_Intermediate;
+        Index = index;
         Name = name;
         Notification = notification;
     }
@@ -40,6 +39,14 @@ public class SubHabits {
 
     public void setFrequency_Intermediate(int frequency_Intermediate) {
         Frequency_Intermediate = frequency_Intermediate;
+    }
+
+    public String getIndex() {
+        return Index;
+    }
+
+    public void setIndex(String index) {
+        Index = index;
     }
 
     public String getName() {

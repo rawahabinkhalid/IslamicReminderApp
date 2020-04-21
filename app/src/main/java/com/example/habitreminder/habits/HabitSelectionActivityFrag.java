@@ -25,6 +25,7 @@ import com.example.habitreminder.Data.SubHabits;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.example.habitreminder.userhome.FragmentHome;
+import com.firebase.client.DataSnapshot;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,7 +38,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,11 +52,11 @@ import java.util.Objects;
 public class HabitSelectionActivityFrag extends Fragment implements View.OnClickListener {
     private Button saveData;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private CollectionReference addHabitRef;
+    //    private CollectionReference addHabitRef;
     private String userID;
     private FirebaseFirestore db;
     private RecyclerView myHabitsRv;
-    private List<HabitsData> myHabitslist;
+    //    private List<HabitsData> myHabitslist;
     private Main_Habits_Adapter myHabitsAdaper;
 
 
@@ -120,32 +124,58 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
         ImageButton backButton = view.findViewById(R.id.backButton);
         saveData = view.findViewById(R.id.saveData);
         backButton.setOnClickListener(this);
-         saveData.setOnClickListener(this);
+        saveData.setOnClickListener(this);
         db = FirebaseFirestore.getInstance();
         myHabitsRv = view.findViewById(R.id.rv_main_habits);
-        addHabitRef = db.collection("habits");
+//        addHabitRef = db.collection("habits");
 
-        GridLayoutManager gl = new GridLayoutManager(getActivity() ,2);
+        GridLayoutManager gl = new GridLayoutManager(getActivity(), 2);
         gl.setOrientation(gl.VERTICAL);
         myHabitsRv.setLayoutManager(gl);
-        myHabitslist = new ArrayList<>();
+//        myHabitslist = new ArrayList<>();
 
         //addHabitRef =
         db.collection("habits/").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<String> habitData = new ArrayList<>();
-                if(task.isSuccessful()){
+                List<HabitsData> habitData = new ArrayList<>();
+                if (task.isSuccessful()) {
                     List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
-
-                    for (DocumentSnapshot d :myListOfDocuments) {
+//                    for (DocumentSnapshot d : myListOfDocuments) {
+//                        Log.i("HabitsSelect", String.valueOf(d.getId()));
+//                        List<Map<String, Object>> subHabits = (List<Map<String, Object>>) d.get("SubHabits");
+//                        Log.i("subHabits_Name", String.valueOf(d.getString("Name")));
+//                        Log.i("subHabits_Notification", String.valueOf(d.getString("Notification")));
+//                        Log.i("subHabits", String.valueOf(subHabits));
+//                        HabitsData tempHabitModel = new HabitsData(d.getId(), d.getString("Name"), d.getString("Notification"), subHabits);
+//                        habitData.add(tempHabitModel);
+//                    }
+                    for (DocumentSnapshot d : myListOfDocuments) {
                         String name = d.getString("Name");
+                        String notification = d.getString("Notification");
 
+                        List<SubHabits> subHabits = new ArrayList<>();
+                        List<Map<String, Object>> s = (List<Map<String, Object>>) d.get("SubHabits");
+                        int index = 0;
+                        for (Map<String, Object> data : s) {
+                            Log.i("subHabitsData", String.valueOf(data));
+                            int frequencyAdvanced = Integer.parseInt(data.get("Frequency_Advanced").toString());
+                            int frequency_Beginner = Integer.parseInt(data.get("Frequency_Beginner").toString());
+                            int frequency_Intermediate = Integer.parseInt(data.get("Frequency_Intermediate").toString());
+                            String sub_name = data.get("Name").toString();
+                            String sub_notification = data.get("Notification").toString();
 
-                          habitData.add(name);
+                            subHabits.add(new SubHabits(frequencyAdvanced, frequency_Beginner, frequency_Intermediate, String.valueOf(index), sub_name, sub_notification));
+                            index++;
+                        }
+
+                        habitData.add(new HabitsData(d.getId(), name, notification, subHabits));
                     }
 
                 }
+
+//            }
+
                 myHabitsAdaper = new Main_Habits_Adapter(getActivity(), habitData);
                 myHabitsRv.setAdapter(myHabitsAdaper);
                 myHabitsAdaper.notifyDataSetChanged();
@@ -181,7 +211,7 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.goBack:
                 getActivity().getSupportFragmentManager().popBackStack();
                 break;
@@ -203,7 +233,7 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
 //                        .commit();
 //                break;
             case R.id.saveData:
-               // SaveData();
+                // SaveData();
                 Toast.makeText(getActivity(), "Save Data", Toast.LENGTH_SHORT).show();
                 AddFrequency frequency = new AddFrequency();
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
@@ -215,7 +245,6 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
 
         }
     }
-
 
 
     @Override
@@ -234,6 +263,7 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
         super.onDetach();
         mListener = null;
     }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

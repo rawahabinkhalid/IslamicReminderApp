@@ -160,6 +160,8 @@
     <string name="Intermediate">Intermediate</string>
     <string name="advanced">Advanced</string>
     <string name="allhamdullilah_for">Allhamdullilah for...</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="fcm_message">FCM Message</string>
 
 
 </resources>

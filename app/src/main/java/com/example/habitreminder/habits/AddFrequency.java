@@ -2,6 +2,7 @@ package com.example.habitreminder.habits;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,22 +19,33 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import com.example.habitreminder.Adapters.Main_Habits_Adapter;
 import com.example.habitreminder.Data.AddFrequencyData;
 import com.example.habitreminder.Data.SubHabits;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.example.habitreminder.userhome.FragmentHome;
+import com.example.habitreminder.userhome.UserDashboardActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -49,7 +61,8 @@ public class AddFrequency extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String userID;
-    private String subHabit_name, mainHabits_name;
+    private String subHabit_name, mainHabits_name, habit_key, subHabit_index, Body, Title, Token, Time, Interval, Sound, Type, Frequency;
+    private String Frequency_Intermediate, Frequency_Advanced, Frequency_Beginner;
     private CollectionReference addHabits;
     private RadioGroup radioGroup;
 
@@ -68,9 +81,17 @@ public class AddFrequency extends Fragment {
         heading_frequency = root.findViewById(R.id.heading_frequency);
         radioGroup = (RadioGroup) root.findViewById(R.id.radio);
 
+        Date date = new Date();
+        long time = date.getTime();
+        Timestamp ts = new Timestamp(time);
+
 //        radio_beginner = root.findViewById(R.id.radio_beginner);
 //        radio_intermediate = root.findViewById(R.id.radio_intermediate);
 //        radio_advance = root.findViewById(R.id.radio_advance);
+        Title = "Habit Reminder Notification";
+        Type = "Habit";
+        Sound = "Enabled";
+        Time = String.valueOf(ts);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,14 +105,24 @@ public class AddFrequency extends Fragment {
             }
         });
         // Sub name of habits
-        SharedPreferences sharedPreferences_sub = this.getActivity().getSharedPreferences("Name",
-                Context.MODE_PRIVATE);
-        subHabit_name = sharedPreferences_sub.getString("name", "");
-        heading_frequency.setText(subHabit_name);
+//        SharedPreferences sharedPreferences_sub = this.getActivity().getSharedPreferences("Name",
+//                Context.MODE_PRIVATE);
         // main name of habits
         SharedPreferences sharedPreferences_Main = this.getActivity().getSharedPreferences("Name_main",
                 Context.MODE_PRIVATE);
         mainHabits_name = sharedPreferences_Main.getString("name_main", "");
+        habit_key = sharedPreferences_Main.getString("key_main", "");
+        subHabit_name = sharedPreferences_Main.getString("sub_name_main", "");
+        subHabit_index = sharedPreferences_Main.getString("sub_index_main", "");
+        Body = sharedPreferences_Main.getString("sub_notification_main", "");
+        Frequency_Beginner = sharedPreferences_Main.getString("Frequency_Beginner", "");
+        Frequency_Advanced = sharedPreferences_Main.getString("Frequency_Advanced", "");
+        Frequency_Intermediate = sharedPreferences_Main.getString("Frequency_Intermediate", "");
+
+        SharedPreferences companyId = this.getActivity().getSharedPreferences("Token",
+                Context.MODE_PRIVATE);
+        Token = companyId.getString("token", "");
+        heading_frequency.setText(subHabit_name);
 
         //current user ID
         OnboardPreferenceManager oPm = new OnboardPreferenceManager(getContext());
@@ -119,18 +150,27 @@ public class AddFrequency extends Fragment {
             public void onClick(View v) {
                 // get selected radio button from radioGroup
                 int selectedId = radioGroup.getCheckedRadioButtonId();
-
+//                String frequency = "";
                 if (selectedId == 2131296596) {
-                    Toast.makeText(getActivity(), "selected Intermediate", Toast.LENGTH_SHORT).show();
-                    addNote_Intermediate();
+//                    Toast.makeText(getActivity(), "selected Intermediate", Toast.LENGTH_SHORT).show();
+//                    addNote_Intermediate();
+//                    frequency = "2";
+                    Frequency = "Intermediate";
+                    Interval = getEstimatedIntervalFromFrequency(Frequency_Intermediate);
                 } else if (selectedId == 2131296595) {
-                    Toast.makeText(getActivity(), "selected Beginner", Toast.LENGTH_SHORT).show();
-                    addNote_Beginner();
+//                    Toast.makeText(getActivity(), "selected Beginner", Toast.LENGTH_SHORT).show();
+//                    addNote_Beginner();
+//                    frequency = "1";
+                    Frequency = "Beginner";
+                    Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
                 } else {
-                    Toast.makeText(getActivity(), "selected Advance", Toast.LENGTH_SHORT).show();
-                    addNote_Advance();
+//                    Toast.makeText(getActivity(), "selected Advance", Toast.LENGTH_SHORT).show();
+//                    addNote_Advance();
+//                    frequency = "3";
+                    Frequency = "Advanced";
+                    Interval = getEstimatedIntervalFromFrequency(Frequency_Advanced);
                 }
-
+                addNote();
 
             }
 
@@ -138,6 +178,67 @@ public class AddFrequency extends Fragment {
 
     }
 
+    private String getEstimatedIntervalFromFrequency(String Frequency) {
+        return Math.round(24 / Double.parseDouble(Frequency)) + " Hours";
+    }
+
+
+    private void addNote() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("subHabitsName", subHabit_name);
+        map.put("habitName", mainHabits_name);
+        map.put("frequency", Frequency);
+//        AddFrequencyData addHabits = new AddFrequencyData();
+
+        db.collection("users").document(userID).collection("AddHabits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d(TAG, "onSuccess : task was successful");
+                setNotificationForHabit();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onSuccess : task was unsuccessful");
+                    }
+                });
+
+
+    }
+
+    private void setNotificationForHabit() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("Body", Body);
+        map.put("Frequency", Frequency);
+        map.put("HabitKey", habit_key);
+        map.put("Interval", Interval);
+        map.put("Sound", Sound);
+        map.put("SubHabit", subHabit_name);
+        map.put("SubHabitIndex", subHabit_index);
+        map.put("Time", Time);
+        map.put("Title", Title);
+        map.put("Token", Token);
+        map.put("Type", Type);
+        map.put("Status", "Pending");
+        db.collection("notifications").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d(TAG, "onSuccess : task was successful");
+                startActivity(new Intent(getContext(), UserDashboardActivity.class));
+                ((FragmentActivity) getContext()).finish();
+
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onSuccess : task was unsuccessful");
+                    }
+                });
+    }
 
     private void addNote_Advance() {
         Map<String, Object> map = new HashMap<>();
@@ -147,7 +248,7 @@ public class AddFrequency extends Fragment {
         map.put("advance", "3");
 //        AddFrequencyData addHabits = new AddFrequencyData();
 
-        db.collection("users").document(userID).collection("AddHibits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("users").document(userID).collection("AddHabits").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "onSuccess : task was successful");

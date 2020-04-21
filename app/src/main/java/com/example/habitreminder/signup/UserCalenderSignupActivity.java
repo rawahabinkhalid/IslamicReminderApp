@@ -134,7 +134,7 @@ public class UserCalenderSignupActivity extends AppCompatActivity {
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void v) {
-                    prefManager.setUserData(userData.get("name").toString(), userData.get("email").toString(), userData.get("account_type").toString());
+                    prefManager.setUserData(user.getUid(), userData.get("name").toString(), userData.get("email").toString(), userData.get("account_type").toString());
                     if(calendarData.size() > 0){
                         saveCalendarEvents(user.getUid());
                         return;

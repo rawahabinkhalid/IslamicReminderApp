@@ -27,12 +27,12 @@ import java.util.Objects;
 
 public class Main_Habits_Adapter extends RecyclerView.Adapter<Main_Habits_Adapter.Main_habitsVH> {
     Context mContx;
-    List<String> mData;
+    List<HabitsData> mData;
     FragmentTransaction fragmentTransaction;
     public Main_Habits_Adapter() {
     }
 
-    public Main_Habits_Adapter(Context mContx, List<String> mData) {
+    public Main_Habits_Adapter(Context mContx, List<HabitsData> mData) {
         this.mContx = mContx;
         this.mData = mData;
     }
@@ -45,7 +45,7 @@ public class Main_Habits_Adapter extends RecyclerView.Adapter<Main_Habits_Adapte
 
     @Override
     public void onBindViewHolder(@NonNull Main_habitsVH holder, final int position) {
-        holder.habits_title.setText(mData.get(position));
+        holder.habits_title.setText(mData.get(position).getName());
         holder.habit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +53,8 @@ public class Main_Habits_Adapter extends RecyclerView.Adapter<Main_Habits_Adapte
                 SharedPreferences companyId = ((FragmentActivity) mContx).getSharedPreferences("Name_main",
                         Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = companyId.edit();
-                editor.putString("name_main", mData.get(position));
+                editor.putString("name_main", mData.get(position).getName());
+                editor.putString("key_main", mData.get(position).getKey());
                 editor.commit();
                 FragmentTransaction fragmentTransaction= ((FragmentActivity)mContx).getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_container_habits,new Subhabits_Fragment());
