@@ -209,6 +209,7 @@ public class FragmentHome extends Fragment {
 
         getHabitStatusForCalendar();
         getCalendarData();
+        db = FirebaseFirestore.getInstance();
 
        // fetchStringResources();
       //  fetchRecordResources();
