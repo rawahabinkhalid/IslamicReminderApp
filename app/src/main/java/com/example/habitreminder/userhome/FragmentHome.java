@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,11 +28,14 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.habitreminder.Adapters.Main_Habits_Adapter;
 import com.example.habitreminder.Adapters.ReminderAdapter;
 import com.example.habitreminder.Adapters.JournalAdapterHome;
 import com.example.habitreminder.Data.CalendarData;
+import com.example.habitreminder.Data.HabitsData;
 import com.example.habitreminder.Data.ReminderData;
 import com.example.habitreminder.Data.JournalData;
+import com.example.habitreminder.Data.SubHabits;
 import com.example.habitreminder.Journal.WriteJournal;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
@@ -114,6 +118,8 @@ public class FragmentHome extends Fragment {
     private String Locale = "%02d";
     private String template = "dd/MM/yyyy";
     private int month = -1;
+    private Main_Habits_Adapter myHabitsAdaper;
+    private FirebaseFirestore db;
 
     public FragmentHome() {
 
@@ -177,16 +183,16 @@ public class FragmentHome extends Fragment {
         total_habits_done_date = rootview.findViewById(R.id.total_habits_done_date);
 
         reminder_heading = rootview.findViewById(R.id.reminder_heading);
-        reminder_button = rootview.findViewById(R.id.reminder_button);
+       // reminder_button = rootview.findViewById(R.id.reminder_button);
         journal_heading = rootview.findViewById(R.id.journal_heading);
         journal_tasks = rootview.findViewById(R.id.journal_tasks);
         journal_button = rootview.findViewById(R.id.journal_button);
         calender_home = rootview.findViewById(R.id.calender_home);
         calender_home_subhead = rootview.findViewById(R.id.calender_home_subhead);
-        calender_home.setHeaderColor(R.color.white);
-        calender_home.setHeaderLabelColor(R.color.black);
-        calender_home.setForwardButtonImage(getResources().getDrawable(R.drawable.ic_navigate_next_black_24dp));
-        calender_home.setPreviousButtonImage(getResources().getDrawable(R.drawable.ic_navigate_before_black_24dp));
+//        calender_home.setHeaderColor(R.color.white);
+//        calender_home.setHeaderLabelColor(R.color.black);
+//        calender_home.setForwardButtonImage(getResources().getDrawable(R.drawable.ic_navigate_next_black_24dp));
+//        calender_home.setPreviousButtonImage(getResources().getDrawable(R.drawable.ic_navigate_before_black_24dp));
 
         Calendar cal = Calendar.getInstance();
 
@@ -194,18 +200,18 @@ public class FragmentHome extends Fragment {
         calendars.add(cal);
         cal.set(2020, 5, 7);
         calendars.add(cal);
-        calender_home.setHighlightedDays(calendars);
+        //calender_home.setHighlightedDays(calendars);
 
-        cal = Calendar.getInstance();
-        month = cal.getTime().getMonth();
-        SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
-        calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+//        cal = Calendar.getInstance();
+//        month = cal.getTime().getMonth();
+//        SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+//        calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
 
         getHabitStatusForCalendar();
         getCalendarData();
 
-        fetchStringResources();
-        fetchRecordResources();
+       // fetchStringResources();
+      //  fetchRecordResources();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference addJournalRef = db.collection("users");
@@ -239,38 +245,42 @@ public class FragmentHome extends Fragment {
 // load data reminder
         reminderDataList = new ArrayList<>();
         myHabits_RV = (RecyclerView) rootview.findViewById(R.id.rv_habits);
-        LinearLayoutManager ll1 = new LinearLayoutManager(activity);
-        ll1.setOrientation(LinearLayoutManager.VERTICAL);
-        myHabits_RV.setLayoutManager(ll1);
+//        LinearLayoutManager ll1 = new LinearLayoutManager(activity);
+//        ll1.setOrientation(LinearLayoutManager.VERTICAL);
+//        myHabits_RV.setLayoutManager(ll1);
+        GridLayoutManager gl = new GridLayoutManager(getActivity(), 2);
+        gl.setOrientation(gl.VERTICAL);
+        myHabits_RV.setLayoutManager(gl);
+
+        getHabitsAtHome();
+
+     //   CollectionReference addHabits = db.collection("users");
 
 
-        CollectionReference addHabits = db.collection("users");
-
-
-        addHabits.document(userID).collection("AddReminder").orderBy("defaultDate", Query.Direction.DESCENDING).limit(2).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    Log.d("data1", queryDocumentSnapshots.toString());
-                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                    Log.d(" list1", "" + list);
-                    int counter = 0;
-                    for (DocumentSnapshot d : list) {
-
-                        ReminderData p = d.toObject(ReminderData.class);
-                        reminderDataList.add(p);
-
-                    }
-                } else {
-                    Log.d("data2", queryDocumentSnapshots.toString());
-                }
-
-                reminderAdapter = new ReminderAdapter(getActivity(), reminderDataList);
-
-                myHabits_RV.setAdapter(reminderAdapter);
-                reminderAdapter.notifyDataSetChanged();
-            }
-        });
+//        addHabits.document(userID).collection("AddReminder").orderBy("defaultDate", Query.Direction.DESCENDING).limit(2).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                if (!queryDocumentSnapshots.isEmpty()) {
+//                    Log.d("data1", queryDocumentSnapshots.toString());
+//                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+//                    Log.d(" list1", "" + list);
+//                    int counter = 0;
+//                    for (DocumentSnapshot d : list) {
+//
+//                        ReminderData p = d.toObject(ReminderData.class);
+//                        reminderDataList.add(p);
+//
+//                    }
+//                } else {
+//                    Log.d("data2", queryDocumentSnapshots.toString());
+//                }
+//
+//                reminderAdapter = new ReminderAdapter(getActivity(), reminderDataList);
+//
+//                myHabits_RV.setAdapter(reminderAdapter);
+//                reminderAdapter.notifyDataSetChanged();
+//            }
+//        });
         //add journal button
         addJournal = (Button) rootview.findViewById(R.id.journal_button);
         addJournal.setOnClickListener(new View.OnClickListener() {
@@ -284,17 +294,17 @@ public class FragmentHome extends Fragment {
             }
         });
         // add reminder button
-        addReminder = (Button) rootview.findViewById(R.id.reminder_button);
-        addReminder.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AddCustomHabit addHabit = new AddCustomHabit();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
-                        .replace(R.id.mainFrame, addHabit, "addHabit")
-                        .addToBackStack("addHabit")
-                        .commit();
-            }
-        });
+      //  addReminder = (Button) rootview.findViewById(R.id.reminder_button);
+//        addReminder.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                AddCustomHabit addHabit = new AddCustomHabit();
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(R.anim.activity_slide_in, R.anim.activity_slide_out)
+//                        .replace(R.id.mainFrame, addHabit, "addHabit")
+//                        .addToBackStack("addHabit")
+//                        .commit();
+//            }
+//        });
 
         welcomeuser = rootview.findViewById(R.id.welcomeUser);
         if (oPm.isGoogleSignIn()) {
@@ -333,6 +343,58 @@ public class FragmentHome extends Fragment {
         }
 
         return rootview;
+    }
+
+    private void getHabitsAtHome() {
+        db.collection("habits/").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<HabitsData> habitData = new ArrayList<>();
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+//                    for (DocumentSnapshot d : myListOfDocuments) {
+//                        Log.i("HabitsSelect", String.valueOf(d.getId()));
+//                        List<Map<String, Object>> subHabits = (List<Map<String, Object>>) d.get("SubHabits");
+//                        Log.i("subHabits_Name", String.valueOf(d.getString("Name")));
+//                        Log.i("subHabits_Notification", String.valueOf(d.getString("Notification")));
+//                        Log.i("subHabits", String.valueOf(subHabits));
+//                        HabitsData tempHabitModel = new HabitsData(d.getId(), d.getString("Name"), d.getString("Notification"), subHabits);
+//                        habitData.add(tempHabitModel);
+//                    }
+                    for (DocumentSnapshot d : myListOfDocuments) {
+                        String name = d.getString("Name");
+                        String notification = d.getString("Notification");
+
+                        List<SubHabits> subHabits = new ArrayList<>();
+                        if(d.get("SubHabits") != null) {
+                            List<Map<String, Object>> s = (List<Map<String, Object>>) d.get("SubHabits");
+                            int index = 0;
+                            for (Map<String, Object> data : s) {
+                                Log.i("subHabitsData", String.valueOf(data));
+                                int frequencyAdvanced = Integer.parseInt(data.get("Frequency_Advanced").toString());
+                                int frequency_Beginner = Integer.parseInt(data.get("Frequency_Beginner").toString());
+                                int frequency_Intermediate = Integer.parseInt(data.get("Frequency_Intermediate").toString());
+                                String sub_name = data.get("Name").toString();
+                                String sub_notification = data.get("Notification").toString();
+
+                                subHabits.add(new SubHabits(frequencyAdvanced, frequency_Beginner, frequency_Intermediate, String.valueOf(index), sub_name, sub_notification));
+                                index++;
+                            }
+                            habitData.add(new HabitsData(d.getId(), name, notification, subHabits));
+                        }
+                    }
+
+                }
+
+//            }
+
+                myHabitsAdaper = new Main_Habits_Adapter(getActivity(), habitData);
+                myHabits_RV.setAdapter(myHabitsAdaper);
+                myHabitsAdaper.notifyDataSetChanged();
+            }
+        });
+
+
     }
 
     private void getHabitStatusForCalendar() {
@@ -391,58 +453,58 @@ public class FragmentHome extends Fragment {
             }
         });
 
-        calender_home.setOnDayClickListener(new OnDayClickListener() {
-            @Override
-            public void onDayClick(EventDay eventDay) {
-                Calendar clickedDayCalendar = eventDay.getCalendar();
-                String selected_date = String.format(Locale, clickedDayCalendar.getTime().getDate());
-                selected_date += "/";
-                selected_date += String.format(Locale, clickedDayCalendar.getTime().getMonth() + 1);
-                selected_date += "/";
-                selected_date += String.valueOf(clickedDayCalendar.getTime().getYear() + 1900);
-                int iter = 0;
-                String events_selected_date = "";
-                try {
-                    Date date_selected = new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(selected_date);
-                    for (String d : title) {
-                        if (String.valueOf(date_selected).equals(String.valueOf(new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(start_date.get(iter))))) {
-                            events_selected_date += title.get(iter) + "\n";
-                            Toast.makeText(getContext(), events_selected_date, Toast.LENGTH_LONG).show();
-                        }
-                        iter++;
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        calender_home.setOnPreviousPageChangeListener(new OnCalendarPageChangeListener() {
-            @Override
-            public void onChange() {
-                Calendar cal = Calendar.getInstance();
-                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
-                cal.set(Calendar.YEAR, month, 1);
-                cal.add(Calendar.MONTH, -1);
-                month--;
-                if (month < 0)
-                    month = 11;
-                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
-            }
-        });
-        calender_home.setOnForwardPageChangeListener(new OnCalendarPageChangeListener() {
-            @Override
-            public void onChange() {
-                Calendar cal = Calendar.getInstance();
-                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
-                cal.set(Calendar.YEAR, month, 1);
-                cal.add(Calendar.MONTH, 1);
-                month++;
-                if (month > 11)
-                    month = 0;
-                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
-            }
-        });
+//        calender_home.setOnDayClickListener(new OnDayClickListener() {
+//            @Override
+//            public void onDayClick(EventDay eventDay) {
+//                Calendar clickedDayCalendar = eventDay.getCalendar();
+//                String selected_date = String.format(Locale, clickedDayCalendar.getTime().getDate());
+//                selected_date += "/";
+//                selected_date += String.format(Locale, clickedDayCalendar.getTime().getMonth() + 1);
+//                selected_date += "/";
+//                selected_date += String.valueOf(clickedDayCalendar.getTime().getYear() + 1900);
+//                int iter = 0;
+//                String events_selected_date = "";
+//                try {
+//                    Date date_selected = new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(selected_date);
+//                    for (String d : title) {
+//                        if (String.valueOf(date_selected).equals(String.valueOf(new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(start_date.get(iter))))) {
+//                            events_selected_date += title.get(iter) + "\n";
+//                            Toast.makeText(getContext(), events_selected_date, Toast.LENGTH_LONG).show();
+//                        }
+//                        iter++;
+//                    }
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        calender_home.setOnPreviousPageChangeListener(new OnCalendarPageChangeListener() {
+//            @Override
+//            public void onChange() {
+//                Calendar cal = Calendar.getInstance();
+//                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+//                cal.set(Calendar.YEAR, month, 1);
+//                cal.add(Calendar.MONTH, -1);
+//                month--;
+//                if (month < 0)
+//                    month = 11;
+//                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+//            }
+//        });
+//        calender_home.setOnForwardPageChangeListener(new OnCalendarPageChangeListener() {
+//            @Override
+//            public void onChange() {
+//                Calendar cal = Calendar.getInstance();
+//                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+//                cal.set(Calendar.YEAR, month, 1);
+//                cal.add(Calendar.MONTH, 1);
+//                month++;
+//                if (month > 11)
+//                    month = 0;
+//                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+//            }
+//        });
     }
 
     private void fetchRecordResources() {
@@ -461,10 +523,10 @@ public class FragmentHome extends Fragment {
                                 int Record3 = (d.get("Record3") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record3")));
                                 int Record4 = (d.get("Record4") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record4")));
                                 String Update_TimeStamp = (d.get("Update_TimeStamp") == null) ? "" : String.valueOf(d.get("Update_TimeStamp"));
-                                record_total_days_numeric.setText(String.valueOf(Record1));
-                                record_current_streak_numeric.setText(String.valueOf(Record2));
-                                best_streak_days_numeric.setText(String.valueOf(Record3));
-                                total_habits_done_numeric.setText(String.valueOf(Record4));
+//                                record_total_days_numeric.setText(String.valueOf(Record1));
+//                                record_current_streak_numeric.setText(String.valueOf(Record2));
+//                                best_streak_days_numeric.setText(String.valueOf(Record3));
+//                                total_habits_done_numeric.setText(String.valueOf(Record4));
                                 if (!Update_TimeStamp.equals("")) {
                                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                                     LocalDateTime now = LocalDateTime.now();

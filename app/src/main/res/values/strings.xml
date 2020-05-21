@@ -162,5 +162,19 @@
     <string name="allhamdullilah_for">Allhamdullilah for...</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_message">FCM Message</string>
+    <string name="day1">Day 1</string>
+    <string name="day2">Day 2</string>
+    <string name="day3">Day 3</string>
+    <string name="day4">Day 4</string>
+    <string name="day5">Day 5</string>
+    <string name="day6">Day 6</string>
+    <string name="day7">Day 7</string>
+    <string name="coming_soon"> Coming Soon</string>
+    <string name="coming_soon_text">Our Circles feature will be coming in the next version.</string>
+    <string name="coming_soon_text2"> Stay tuned!</string>
+    <string name="homescreen_reminder_heading">Choose Your Islamic Reminders</string>
+
+
+
 
 </resources>
