@@ -60,19 +60,19 @@ public class SliderAdapter extends PagerAdapter implements View.OnClickListener 
         TextView dotThree = view.findViewById(R.id.active_dot_3);
         Button begin = view.findViewById(R.id.begin);
         begin.setOnClickListener(this);
-        slideImageView.setImageResource(R.drawable.undraw_mindfulness_s);
+        slideImageView.setImageResource(R.drawable.app_benefit_1);
         slideHeading.setText(slides_heading[position]);
         slideDesc.setText(slides_desc[position]);
         if(position == 1) {
             dotOne.setBackgroundResource(R.drawable.slider_dot_inactive);
             dotTwo.setBackgroundResource(R.drawable.slider_dot_active);
-            slideImageView.setImageResource(R.drawable.undraw_high_five_u36);
+            slideImageView.setImageResource(R.drawable.app_benefit_2);
             begin.setVisibility(View.INVISIBLE);
         } else if( position == 2 ) {
             dotOne.setBackgroundResource(R.drawable.slider_dot_inactive);
             dotTwo.setBackgroundResource(R.drawable.slider_dot_inactive);
             dotThree.setBackgroundResource(R.drawable.slider_dot_active);
-            slideImageView.setImageResource(R.drawable.undraw_hello_aeia_sy);
+            slideImageView.setImageResource(R.drawable.app_benefit_3);
             begin.setVisibility(View.VISIBLE);
         } else {
             begin.setVisibility(View.INVISIBLE);
