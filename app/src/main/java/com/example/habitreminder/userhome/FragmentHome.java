@@ -4,9 +4,14 @@ package com.example.habitreminder.userhome;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +45,10 @@ import com.example.habitreminder.Journal.WriteJournal;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.example.habitreminder.Reminders.AddCustomHabit;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -120,6 +129,11 @@ public class FragmentHome extends Fragment {
     private int month = -1;
     private Main_Habits_Adapter myHabitsAdaper;
     private FirebaseFirestore db;
+    PieChart pieChartStreaks;
+    String streaks_completed_text;
+    String currentStreak = "0";
+    String bestStreak = "0";
+    String streaks_completed_text_firebase = "";
 
     public FragmentHome() {
 
@@ -187,8 +201,9 @@ public class FragmentHome extends Fragment {
         journal_heading = rootview.findViewById(R.id.journal_heading);
         journal_tasks = rootview.findViewById(R.id.journal_tasks);
         journal_button = rootview.findViewById(R.id.journal_button);
-        calender_home = rootview.findViewById(R.id.calender_home);
-        calender_home_subhead = rootview.findViewById(R.id.calender_home_subhead);
+//        calender_home = rootview.findViewById(R.id.calender_home);
+//        calender_home_subhead = rootview.findViewById(R.id.calender_home_subhead);
+        pieChartStreaks = rootview.findViewById(R.id.streaksCompleted);
 //        calender_home.setHeaderColor(R.color.white);
 //        calender_home.setHeaderLabelColor(R.color.black);
 //        calender_home.setForwardButtonImage(getResources().getDrawable(R.drawable.ic_navigate_next_black_24dp));
@@ -208,10 +223,10 @@ public class FragmentHome extends Fragment {
 //        calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
 
         getHabitStatusForCalendar();
-        getCalendarData();
+//        getCalendarData();
         db = FirebaseFirestore.getInstance();
 
-       // fetchStringResources();
+        fetchStringResources();
       //  fetchRecordResources();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -254,7 +269,7 @@ public class FragmentHome extends Fragment {
         myHabits_RV.setLayoutManager(gl);
 
         getHabitsAtHome();
-
+        streakchartmethod();
      //   CollectionReference addHabits = db.collection("users");
 
 
@@ -312,11 +327,11 @@ public class FragmentHome extends Fragment {
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
             if (acct != null) {
                 personName = acct.getDisplayName();
-                welcomeuser.setText("Welcome,\n" + personName);
+                welcomeuser.setText("As-salāmu ʿalaykum " + personName);
 //                cPN.setUID(acct.getId());
             }
         } else if (oPm.isFacebookSignIn()) {
-            welcomeuser.setText("Welcome,\n Facebook user");
+            welcomeuser.setText("As-salāmu ʿalaykum Facebook user");
         } else {
             //FirebaseFirestore db = FirebaseFirestore.getInstance();
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -331,7 +346,7 @@ public class FragmentHome extends Fragment {
                         if (document.exists()) {
                             Log.d("Data", "DocumentSnapshot data: " + document.get("timestamp"));
                             personName = document.get("name").toString();
-                            welcomeuser.setText("Welcome,\n" + userName);
+                            welcomeuser.setText("As-salāmu ʿalaykum " + userName);
                         } else {
                             Log.d("Failed", "No such document");
                         }
@@ -345,6 +360,68 @@ public class FragmentHome extends Fragment {
 
         return rootview;
     }
+
+
+    private void streakchartmethod() {
+        pieChartStreaks.setUsePercentValues(false);
+        pieChartStreaks.getDescription().setEnabled(false);
+        pieChartStreaks.setExtraOffsets(5, 10, 5, 5);
+
+        pieChartStreaks.setDragDecelerationFrictionCoef(0.95f);
+
+        pieChartStreaks.setDrawHoleEnabled(true);
+        pieChartStreaks.setHoleColor(Color.WHITE);
+        pieChartStreaks.setTransparentCircleRadius(0);
+        pieChartStreaks.setRotationEnabled(false);
+        if(streaks_completed_text_firebase.equals(""))
+            streaks_completed_text = "Streak\n\n" + currentStreak;
+        else
+            streaks_completed_text = streaks_completed_text_firebase + currentStreak;
+//        streaks_completed_text = getString(R.string.current_streaks) + currentStreak;
+        SpannableString ss = new SpannableString(streaks_completed_text);
+        String[] words = streaks_completed_text.split("\n");  // uses an array
+        String lastWord = words[words.length - 1];
+
+        StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+
+        ForegroundColorSpan fcsgreen = new ForegroundColorSpan(Color.parseColor("#112331"));
+        ForegroundColorSpan fcspink = new ForegroundColorSpan(Color.parseColor("#FFCFB5"));
+        ss.setSpan(fcsgreen, 0, streaks_completed_text.length() - lastWord.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(boldSpan, streaks_completed_text.length() - lastWord.length(), streaks_completed_text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(fcspink, streaks_completed_text.length() - lastWord.length(), streaks_completed_text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(fcsgreen, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(FontStyle.FONT_WEIGHT_MAX, 15, 18, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(fcspink, 15, 18, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        pieChartStreaks.setCenterText(ss);
+        pieChartStreaks.setCenterTextSize(18);
+        pieChartStreaks.setCenterTextColor(Color.parseColor("#113221"));
+        pieChartStreaks.setHoleRadius(75);
+        pieChartStreaks.getLegend().setEnabled(false);
+        double percent = 0;
+        double currentStr = Integer.parseInt(currentStreak);
+        double bestStr = Integer.parseInt(bestStreak);
+        if (bestStr > 0)
+            percent = currentStr / bestStr * 100;
+        double rem_percent = 100 - percent;
+        ArrayList<PieEntry> Val = new ArrayList<>();
+
+        Val.add(new PieEntry(Float.parseFloat(String.valueOf(percent)), ""));
+        Val.add(new PieEntry(Float.parseFloat(String.valueOf(rem_percent)), ""));
+        final int[] MY_COLORS = {Color.rgb(191, 239, 187), Color.rgb(230, 230, 230)};
+        PieDataSet dataSet = new PieDataSet(Val, "Streaks");
+        dataSet.setSliceSpace(0f);
+        dataSet.setSelectionShift(5f);
+        dataSet.setColors(MY_COLORS);
+        PieData data = new PieData(dataSet);
+//        data.setValueTextSize(10f);
+//        data.setValueTextColor(Color.YELLOW);
+        data.setValueTextSize(0);
+
+
+        pieChartStreaks.setData(data);
+        pieChartStreaks.invalidate();
+    }
+
 
     private void getHabitsAtHome() {
         db.collection("habits/").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -566,14 +643,14 @@ public class FragmentHome extends Fragment {
                         if (task.getResult() != null)
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    home_calender_heading.setText(String.valueOf(document.get("Calendar")));
-                                    record_heading.setText(String.valueOf(document.get("Record")));
-                                    total_perfect_days1.setText(String.valueOf(document.get("Record1")));
-                                    record_current_streak.setText(String.valueOf(document.get("Record2")));
-                                    your_best_streak.setText(String.valueOf(document.get("Record3")));
-                                    total_habits_done.setText(String.valueOf(document.get("Record4")));
-                                    reminder_heading.setText(String.valueOf(document.get("Reminder_Heading")));
-                                    reminder_button.setText(String.valueOf(document.get("Reminder_Button")));
+//                                    home_calender_heading.setText(String.valueOf(document.get("Calendar")));
+//                                    record_heading.setText(String.valueOf(document.get("Record")));
+//                                    total_perfect_days1.setText(String.valueOf(document.get("Record1")));
+//                                    record_current_streak.setText(String.valueOf(document.get("Record2")));
+//                                    your_best_streak.setText(String.valueOf(document.get("Record3")));
+//                                    total_habits_done.setText(String.valueOf(document.get("Record4")));
+//                                    reminder_heading.setText(String.valueOf(document.get("Reminder_Heading")));
+//                                    reminder_button.setText(String.valueOf(document.get("Reminder_Button")));
                                     journal_heading.setText(String.valueOf(document.get("Journal_Heading")));
                                     journal_tasks.setText(String.valueOf(document.get("Journal_Subheading")));
                                     journal_button.setText(String.valueOf(document.get("Journal_Button")));

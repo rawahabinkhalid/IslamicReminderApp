@@ -29,13 +29,13 @@ public class SliderAdapter extends PagerAdapter implements View.OnClickListener 
 
     private int[] slides_heading = {
             R.string.onboarding_reach_your_goals,
-            R.string.onboarding_improve_collectively_heading,
+            R.string.onboarding_build_your_day_heading,
             R.string.onboarding_grow_mind_heading
     };
 
     private int[] slides_desc = {
             R.string.onboarding_ajr_tracker,
-            R.string.onboarding_together_cricle,
+            R.string.onboarding_build_your_day_text,
             R.string.onboarding_gratitude_journal
     };
 

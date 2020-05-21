@@ -61,6 +61,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="10dp"
                     android:paddingLeft="20dp"
+                    android:text="Daily Goals"
                     android:textColor="@color/black_light"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -143,7 +144,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/curve_border_green_record_background"
+                        android:background="@drawable/curve_border_red_record_background"
                         android:orientation="horizontal">
 
                         <TextView
@@ -186,7 +187,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/curve_border_green_record_background"
+                        android:background="@drawable/curve_border_yellow_record_background"
                         android:orientation="horizontal">
 
                         <TextView
@@ -229,7 +230,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/curve_border_green_record_background"
+                        android:background="@drawable/curve_border_blue_record_background"
                         android:orientation="horizontal">
 
                         <TextView

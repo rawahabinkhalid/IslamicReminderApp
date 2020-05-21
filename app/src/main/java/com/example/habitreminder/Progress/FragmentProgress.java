@@ -23,8 +23,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener;
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.habitreminder.Data.CalendarData;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -37,6 +44,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -51,6 +59,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,6 +86,23 @@ public class FragmentProgress extends Fragment {
     TextView streaks;
     TextView longestStreak;
     String reminder_completed_text_firebase = "", streaks_completed_text_firebase = "";
+    private TextView record_heading;
+    private TextView total_perfect_days1;
+    private TextView record_current_streak;
+    private TextView your_best_streak;
+    private TextView total_habits_done;
+
+    private TextView home_calender_heading;
+    private TextView calender_home_subhead;
+    private CalendarView calender_home;
+    public List<CalendarData> calendarDataList;
+    private ArrayList<String> description = new ArrayList<>();
+    private ArrayList<String> end_date = new ArrayList<>();
+    private ArrayList<String> start_date = new ArrayList<>();
+    private ArrayList<String> title = new ArrayList<>();
+    private String Locale = "%02d";
+    private String template = "dd/MM/yyyy";
+    private int month = -1;
 
     public FragmentProgress() {
         // Required empty public constructor
@@ -115,8 +142,141 @@ public class FragmentProgress extends Fragment {
         upcoming_reminders_total = Rootview.findViewById(R.id.upcoming_reminders_total);
         remianing_time_digits = Rootview.findViewById(R.id.remianing_time_digits);
         logestStreakDay = Rootview.findViewById(R.id.logestStreakDay);
+        record_heading = Rootview.findViewById(R.id.record_heading);
+        total_perfect_days1 = Rootview.findViewById(R.id.total_perfect_days1);
+        record_current_streak = Rootview.findViewById(R.id.record_current_streak);
+        your_best_streak = Rootview.findViewById(R.id.your_best_streak);
+        total_habits_done = Rootview.findViewById(R.id.total_habits_done);
+
+        calender_home = Rootview.findViewById(R.id.calender_home);
+        home_calender_heading = Rootview.findViewById(R.id.home_calender_heading);
+        calender_home_subhead = Rootview.findViewById(R.id.calender_home_subhead);
+        calender_home.setHeaderColor(R.color.white);
+        calender_home.setHeaderLabelColor(R.color.black);
+        calender_home.setForwardButtonImage(getResources().getDrawable(R.drawable.ic_navigate_next_black_24dp));
+        calender_home.setPreviousButtonImage(getResources().getDrawable(R.drawable.ic_navigate_before_black_24dp));
+
+        Calendar cal = Calendar.getInstance();
+
+        List<Calendar> calendars = new ArrayList<>();
+        calendars.add(cal);
+//        cal.set(2020, 5, 7);
+        calendars.add(cal);
+
+        cal = Calendar.getInstance();
+        month = cal.getTime().getMonth();
+        SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+        calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+
+        getCalendarData();
         fetchStringResources();
         return Rootview;
+    }
+
+    private void getCalendarData() {
+        List<EventDay> events = new ArrayList<>();
+
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference calendarRef = db.collection("calendar/");
+
+
+        calendarRef.document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+//                    Log.i("documentCal", String.valueOf(document.get("events")));
+                    if (document.get("events") != null) {
+                        Map<String, ArrayList<String>> events_map = (Map<String, ArrayList<String>>) document.get("events");
+//                    for (Object o : events) {
+//                    Log.d("cal_value", "List element " + events.toString());
+                        for (Map.Entry<String, ArrayList<String>> entry : events_map.entrySet()) {
+                            if (entry.getKey().equals("end_date"))
+                                end_date = entry.getValue();
+                            else if (entry.getKey().equals("description"))
+                                description = entry.getValue();
+                            else if (entry.getKey().equals("title"))
+                                title = entry.getValue();
+                            else if (entry.getKey().equals("start_date"))
+                                start_date = entry.getValue();
+                        }
+
+                        int iter = 0;
+                        for (String d : title) {
+                            try {
+                                Date date1 = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a").parse(start_date.get(iter));
+                                SimpleDateFormat df = new SimpleDateFormat("yyyy");
+                                String year = df.format(date1);
+
+//                            Log.i("cal_value_data", Integer.parseInt(year) + " " + date1.getMonth() + " " + date1.getDate() + " " + date1.getHours() + " " + date1.getMinutes() + " " + date1.getSeconds());
+
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.set(Integer.parseInt(year), date1.getMonth(), date1.getDate(), date1.getHours(), date1.getMinutes(), date1.getSeconds());
+                                events.add(new EventDay(calendar, R.drawable.applogo));
+//                            events.add(new EventDay(calendar, R.drawable.applogo, Color.parseColor("#228B22")));
+                                calender_home.setEvents(events);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            iter++;
+                        }
+                    }
+                }
+            }
+        });
+
+        calender_home.setOnDayClickListener(new OnDayClickListener() {
+            @Override
+            public void onDayClick(EventDay eventDay) {
+                Calendar clickedDayCalendar = eventDay.getCalendar();
+                String selected_date = String.format(Locale, clickedDayCalendar.getTime().getDate());
+                selected_date += "/";
+                selected_date += String.format(Locale, clickedDayCalendar.getTime().getMonth() + 1);
+                selected_date += "/";
+                selected_date += String.valueOf(clickedDayCalendar.getTime().getYear() + 1900);
+                int iter = 0;
+                String events_selected_date = "";
+                try {
+                    Date date_selected = new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(selected_date);
+                    for (String d : title) {
+                        if (String.valueOf(date_selected).equals(String.valueOf(new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(start_date.get(iter))))) {
+                            events_selected_date += title.get(iter) + "\n";
+                            Toast.makeText(getContext(), events_selected_date, Toast.LENGTH_LONG).show();
+                        }
+                        iter++;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        calender_home.setOnPreviousPageChangeListener(new OnCalendarPageChangeListener() {
+            @Override
+            public void onChange() {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+                cal.set(Calendar.YEAR, month, 1);
+                cal.add(Calendar.MONTH, -1);
+                month--;
+                if (month < 0)
+                    month = 11;
+                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+            }
+        });
+        calender_home.setOnForwardPageChangeListener(new OnCalendarPageChangeListener() {
+            @Override
+            public void onChange() {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+                cal.set(Calendar.YEAR, month, 1);
+                cal.add(Calendar.MONTH, 1);
+                month++;
+                if (month > 11)
+                    month = 0;
+                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+            }
+        });
     }
 
     private void streakchartmethod() {
@@ -345,6 +505,31 @@ public class FragmentProgress extends Fragment {
                                     getReminderCount();
                                     piechartmethod();
                                     streakchartmethod();
+                                }
+                            } else {
+                                Log.d("TagJournal", "Error getting documents: ", task.getException());
+                            }
+                    }
+                });
+        dbMain.collection("home")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null)
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    home_calender_heading.setText(String.valueOf(document.get("Calendar")));
+                                    record_heading.setText(String.valueOf(document.get("Record")));
+                                    total_perfect_days1.setText(String.valueOf(document.get("Record1")));
+                                    record_current_streak.setText(String.valueOf(document.get("Record2")));
+                                    your_best_streak.setText(String.valueOf(document.get("Record3")));
+                                    total_habits_done.setText(String.valueOf(document.get("Record4")));
+//                                    reminder_heading.setText(String.valueOf(document.get("Reminder_Heading")));
+//                                    reminder_button.setText(String.valueOf(document.get("Reminder_Button")));
+//                                    journal_heading.setText(String.valueOf(document.get("Journal_Heading")));
+//                                    journal_tasks.setText(String.valueOf(document.get("Journal_Subheading")));
+//                                    journal_button.setText(String.valueOf(document.get("Journal_Button")));
                                 }
                             } else {
                                 Log.d("TagJournal", "Error getting documents: ", task.getException());

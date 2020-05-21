@@ -2,9 +2,11 @@
     <string name="app_name">Habit Reminder</string>
     <string name="onboarding_islamic_goals">Islamic Goals</string>
     <string name="onboarding_improve_collectively_heading">Improve Collectively!</string>
+    <string name="onboarding_build_your_day_heading"><b>Build</b> your Day!</string>
+    <string name="onboarding_build_your_day_text">Around <b>Prayer</b> with your <b>Salah</b> integrated <b>Calendar</b></string>
     <string name="onboarding_together_cricle">Together with your Circles.</string>
-    <string name="onboarding_grow_mind_heading">Grow Mindful!</string>
-    <string name="onboarding_gratitude_journal">Using your Gratitude Journal</string>
+    <string name="onboarding_grow_mind_heading"><b>Grow</b> Mindful!</string>
+    <string name="onboarding_gratitude_journal">Using your <b>Gratitude Journal</b></string>
     <string name="optimze_ibadah">Optimize\nyour\nIbadah</string>
     <string name="login_button">LOGIN</string>
     <string name="signup_button">SIGN UP</string>
@@ -20,8 +22,8 @@
     <string name="confirm_password_input_header">Confirm password:</string>
     <string name="city_name">Which city are you in?</string>
     <string name="use_my_location">Use My Location</string>
-    <string name="onboarding_reach_your_goals">Reach Your Goals</string>
-    <string name="onboarding_ajr_tracker">With your personalized Islamic reminders and Ajr Tracker</string>
+    <string name="onboarding_reach_your_goals"><b>Reach</b> Your Goals</string>
+    <string name="onboarding_ajr_tracker">With your personalized <b>Islamic reminders</b> and <b>Ajr Tracker</b></string>
     <string name="walk_throughscreen_button">Begin</string>
     <string name="create_account">CREATE ACCOUNT</string>
     <string name="iphone_calender">iPhone Calendar</string>

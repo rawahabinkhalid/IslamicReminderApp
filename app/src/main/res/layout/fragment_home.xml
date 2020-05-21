@@ -28,37 +28,7 @@
                 android:textColor="@color/onboarding_heading_color"
                 android:textSize="26sp" />
 
-            <TextView
-                android:id="@+id/details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/onboarding_together_cricle"
-                android:textColor="@color/light_grey"
-                android:textSize="16sp" />
-        </LinearLayout>
-        //CalenderView Linear Layout
 
-        <LinearLayout
-            android:id="@+id/ll_streaks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/welcomeCard"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/curve_border_white_background"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/streaks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:paddingLeft="20dp"
-                android:text="@string/streaks_heading"
-                android:textColor="@color/black_light"
-                android:textSize="20sp" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/streaksCompleted"
@@ -147,14 +117,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/days_circles"
+                        android:background="@drawable/days_circles_grey"
                         android:layout_weight="1"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:background="@drawable/days_circles"
+                        android:background="@drawable/days_circles_grey"
                         android:layout_weight="1"/>
 
                     <TextView
@@ -202,7 +172,7 @@
             android:id="@+id/comming_soon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/ll_streaks"
+            android:layout_below="@+id/welcomeCard"
             android:layout_marginTop="20dp"
             android:background="@drawable/homescreen_comingsoon"
             android:paddingBottom="30dp">
