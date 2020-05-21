@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -78,6 +79,7 @@ public class UserCalenderSignupActivity extends AppCompatActivity {
         googleCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                         requestPermission();
@@ -101,6 +103,10 @@ public class UserCalenderSignupActivity extends AppCompatActivity {
                 userData.put("account_type", "APPUSER");
                 userData.put("createdAt", FieldValue.serverTimestamp());
                 userData.put("timestamp", ServerValue.TIMESTAMP);
+                userData.put("Record1", 0);
+                userData.put("Record2", 0);
+                userData.put("Record3", 0);
+                userData.put("Record4", 0);
                 FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().setTimestampsInSnapshotsEnabled(true).build();
                 db.setFirestoreSettings(settings);
                 createUserAccount(email, password);
@@ -164,6 +170,16 @@ public class UserCalenderSignupActivity extends AppCompatActivity {
     }
 
     public static Map<String, Object> readCalendarEvent(Context context) {
+        ProgressDialog progressDialog;
+        int progress = 8;
+
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("Uploading ... ");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.setProgress(progress);
+        progressDialog.show();
+
         Map<String, Object> calendarData = new HashMap<>();
         ArrayList<String> calendarID = new ArrayList<>();
         ArrayList<String> nameOfEvent = new ArrayList<>();
@@ -194,6 +210,8 @@ public class UserCalenderSignupActivity extends AppCompatActivity {
         calendarData.put("description", descriptions);
         calendarData.put("start_date", startDates);
         calendarData.put("end_date", endDates);
+        progressDialog.dismiss();
+
         return calendarData;
     }
 

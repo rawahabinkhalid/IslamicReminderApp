@@ -54,10 +54,17 @@ import com.google.type.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
@@ -305,13 +312,23 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "getInstanceId failed", task.getException());
                             return;
                         }
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"),
+                                Locale.getDefault());
+                        Date currentLocalTime = calendar.getTime();
+                        DateFormat date = new SimpleDateFormat("z", Locale.getDefault());
+                        String localTime = date.format(currentLocalTime);
+                        localTime = localTime.split("GMT")[1];
 
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
                         DocumentReference dbRef = db.collection("users").document(id);
+                        Map<String, Object> map = new HashMap<>();
+
+                        map.put("token", token);
+                        map.put("GMT", localTime);
 
                         dbRef
-                                .update("token", token)
+                                .update(map)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -335,6 +352,10 @@ public class LoginActivity extends AppCompatActivity {
 
                         Log.d(TAG, msg);
                         Toast.makeText(_context, msg, Toast.LENGTH_SHORT).show();
+//                        Calendar mCalendar = new GregorianCalendar();
+//                        TimeZone mTimeZone = mCalendar.getTimeZone();
+//                        int mGMTOffset = mTimeZone.getRawOffset();
+//                        System.out.printf("GMT offset is %s hours", TimeUnit.HOURS.convert(mGMTOffset, TimeUnit.MILLISECONDS));
                     }
                 });
     }

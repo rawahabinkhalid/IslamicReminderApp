@@ -80,6 +80,9 @@ public class AddFrequency extends Fragment {
         save = root.findViewById(R.id.save);
         heading_frequency = root.findViewById(R.id.heading_frequency);
         radioGroup = (RadioGroup) root.findViewById(R.id.radio);
+        radio_beginner = (RadioButton) root.findViewById(R.id.radio_beginner);
+        radio_intermediate = (RadioButton) root.findViewById(R.id.radio_intermediate);
+        radio_advance = (RadioButton) root.findViewById(R.id.radio_advance);
 
         Date date = new Date();
         long time = date.getTime();
@@ -144,39 +147,75 @@ public class AddFrequency extends Fragment {
     }
 
     private void addListenerOnButton() {
-        save.setOnClickListener(new View.OnClickListener() {
 
+        Frequency = "Beginner";
+        Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("selectedId _ In On", "on click");
+                Log.i("selectedId _ Beginner", String.valueOf(radio_beginner.isChecked()));
+                Log.i("selectedId _ Intermedi", String.valueOf(radio_intermediate.isChecked()));
+                Log.i("selectedId _ Advanced", String.valueOf(radio_advance.isChecked()));
                 // get selected radio button from radioGroup
                 int selectedId = radioGroup.getCheckedRadioButtonId();
-//                String frequency = "";
-                if (selectedId == 2131296596) {
-//                    Toast.makeText(getActivity(), "selected Intermediate", Toast.LENGTH_SHORT).show();
-//                    addNote_Intermediate();
-//                    frequency = "2";
+                Log.i("selectedId", String.valueOf(selectedId));
+//                if (selectedId == 2131296596) {
+                if (radio_intermediate.isChecked()) {
                     Frequency = "Intermediate";
                     Interval = getEstimatedIntervalFromFrequency(Frequency_Intermediate);
-                } else if (selectedId == 2131296595) {
-//                    Toast.makeText(getActivity(), "selected Beginner", Toast.LENGTH_SHORT).show();
-//                    addNote_Beginner();
-//                    frequency = "1";
+//                } else if (selectedId == 2131296595) {
+                } else if (radio_beginner.isChecked()) {
                     Frequency = "Beginner";
                     Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
-                } else {
-//                    Toast.makeText(getActivity(), "selected Advance", Toast.LENGTH_SHORT).show();
-//                    addNote_Advance();
-//                    frequency = "3";
+                } else if (radio_advance.isChecked()) {
+//                } else {
                     Frequency = "Advanced";
                     Interval = getEstimatedIntervalFromFrequency(Frequency_Advanced);
                 }
-                addNote();
-
+                if(radio_intermediate.isChecked() || radio_beginner.isChecked() || radio_advance.isChecked())
+                    addNote();
             }
-
         });
-
     }
+
+//    private void addListenerOnButton() {
+//        Frequency = "Beginner";
+//        Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
+//        save.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                // get selected radio button from radioGroup
+//                int selectedId = radioGroup.getCheckedRadioButtonId();
+//                Log.i("selectedId", String.valueOf(selectedId));
+////                String frequency = "";
+//                if (selectedId == 2131296596) {
+////                    Toast.makeText(getActivity(), "selected Intermediate", Toast.LENGTH_SHORT).show();
+////                    addNote_Intermediate();
+////                    frequency = "2";
+//                    Frequency = "Intermediate";
+//                    Interval = getEstimatedIntervalFromFrequency(Frequency_Intermediate);
+//                } else if (selectedId == 2131296595) {
+////                    Toast.makeText(getActivity(), "selected Beginner", Toast.LENGTH_SHORT).show();
+////                    addNote_Beginner();
+////                    frequency = "1";
+//                    Frequency = "Beginner";
+//                    Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
+//                } else {
+////                    Toast.makeText(getActivity(), "selected Advance", Toast.LENGTH_SHORT).show();
+////                    addNote_Advance();
+////                    frequency = "3";
+//                    Frequency = "Advanced";
+//                    Interval = getEstimatedIntervalFromFrequency(Frequency_Advanced);
+//                }
+//                addNote();
+//
+//            }
+//
+//        });
+//
+//    }
 
     private String getEstimatedIntervalFromFrequency(String Frequency) {
         return Math.round(24 / Double.parseDouble(Frequency)) + " Hours";
@@ -222,6 +261,7 @@ public class AddFrequency extends Fragment {
         map.put("Title", Title);
         map.put("Token", Token);
         map.put("Type", Type);
+        map.put("UserID", userID);
         map.put("Status", "Pending");
         db.collection("notifications").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override

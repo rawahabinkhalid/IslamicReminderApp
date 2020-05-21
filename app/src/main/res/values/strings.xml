@@ -92,7 +92,7 @@
     <string name="ajrTracker"><b>Ajr\nTracker</b></string>
     <string name="view_progress_here">View your progress here</string>
     <string name="progress_daily_goals">Daily\nGoals</string>
-    <string name="pie_chart_reminder_heading">Reminders\nCompleted\n\n5</string>
+    <string name="pie_chart_reminder_heading">Reminders\nCompleted\n\n</string>
     <string name="upcoming_reminders">Upcoming Reminders:</string>
     <string name="upcoming_reminders_total">3</string>
     <string name="time_remaining_heading">Time Remaining:</string>
@@ -107,10 +107,10 @@
     <string name="calender_main_sub_heading">View our Calender</string>
     <string name="journal_list_name">Journal</string>
     <string name="journal_date">Jan. 8 , 2019</string>
-    <string name="current_streaks">Current\nStreaks\n\n5</string>
+    <string name="current_streaks">Current\nStreaks\n\n</string>
     <string name="habits_back">Habits</string>
     <string name="write_habit">Write My Own</string>
-    <string name="choose_habit_type">Or Choose from the Following:</string>
+    <string name="choose_habit_type">Choose from the Following:</string>
     <string name="save">SAVE</string>
     <string name="efficiency">Efficiency</string>
     <string name="social">Social</string>
@@ -162,6 +162,5 @@
     <string name="allhamdullilah_for">Allhamdullilah for...</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_message">FCM Message</string>
-
 
 </resources>

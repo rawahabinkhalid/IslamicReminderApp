@@ -2,9 +2,9 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
     <item android:drawable="@drawable/main_theme"/>
-    <item android:bottom="80dp">
+    <item android:top="150dp">
         <bitmap
-            android:gravity="bottom"
+            android:gravity="center"
             android:src="@drawable/main_logo"/>
     </item>
 </layer-list>

@@ -85,7 +85,7 @@
                         android:id="@+id/upcoming_reminders_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/upcoming_reminders_total"
+                        android:text="0"
                         android:textSize="16sp"
                         android:paddingLeft="5dp"
                         android:textColor="@color/pink"/>
@@ -104,7 +104,7 @@
                         android:id="@+id/remianing_time_digits"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/upcoming_reminders_digits"
+                        android:text="00:00"
                         android:textSize="16sp"
                         android:paddingLeft="5dp"
                         android:layout_marginTop="10dp"
@@ -151,7 +151,7 @@
                         android:id="@+id/logestStreakDay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/longest_streaks_day"
+                        android:text="0"
                         android:textSize="16sp"
                         android:paddingLeft="5dp"
                         android:textColor="@color/pink"/>

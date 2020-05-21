@@ -200,7 +200,7 @@ public class FragmentProfile_and_Settings extends Fragment {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     String Description = String.valueOf(document.get("Description"));
                                     String Name = String.valueOf(document.get("Name"));
-                                    String Status = String.valueOf(document.get("Status"));
+                                    Boolean Status = Boolean.valueOf(String.valueOf(document.get("Status")));
                                     String Type = String.valueOf(document.get("Type"));
                                     Profile_Settings_Model tempModel = new Profile_Settings_Model(Name, Description, Status, Type);
                                     profileExploreList.add(tempModel);
@@ -227,7 +227,7 @@ public class FragmentProfile_and_Settings extends Fragment {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     String Description = String.valueOf(document.get("Description"));
                                     String Name = String.valueOf(document.get("Name"));
-                                    String Status = String.valueOf(document.get("Status"));
+                                    Boolean Status = Boolean.valueOf(String.valueOf(document.get("Status")));
                                     String Type = String.valueOf(document.get("Type"));
                                     Profile_Settings_Model tempModel = new Profile_Settings_Model(Name, Description, Status, Type);
                                     profileSettingList.add(tempModel);

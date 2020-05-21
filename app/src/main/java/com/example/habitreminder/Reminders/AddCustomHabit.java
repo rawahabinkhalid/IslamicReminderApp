@@ -1,12 +1,16 @@
 package com.example.habitreminder.Reminders;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +29,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.habitreminder.Data.ReminderData;
 import com.example.habitreminder.Data.ReminderDataWithoutTime;
+import com.example.habitreminder.NotificationPublisher;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
 import com.example.habitreminder.userhome.FragmentHome;
@@ -140,15 +145,15 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
     }
 
     private void addHabits() {
-//        Calendar calender = Calendar.getInstance();
-//
-//        SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:ss");
-//        String strDate = "" + mdformat.format(calender.getTime());
+        Calendar calender = Calendar.getInstance();
+
+        SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String strDate = "" + mdformat.format(calender.getTime());
 
         final String title = habit_title.getText().toString();
         if (selectedTypeOfReminder.equals("WithoutTimer")) {
             if (!title.equals("")) {
-                ReminderDataWithoutTime reminderData = new ReminderDataWithoutTime(title, selectedTypeOfReminder);
+                ReminderDataWithoutTime reminderData = new ReminderDataWithoutTime(title, selectedTypeOfReminder, strDate);
                 addHabitRef.document(userID).collection("AddReminder").add(reminderData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -173,7 +178,7 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
             else if (title.equals(""))
                 Toast.makeText(getContext(), "Kindly enter title.", Toast.LENGTH_LONG).show();
             else {
-                ReminderData reminderData = new ReminderData(title, selectedTypeOfReminder, time);
+                ReminderData reminderData = new ReminderData(title, selectedTypeOfReminder, time, strDate);
                 addHabitRef.document(userID).collection("AddReminder").add(reminderData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -197,12 +202,13 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
     private void setNotificationForReminder(String title) {
         Map<String, Object> map = new HashMap<>();
 
-        map.put("Body", "Reminder");
+        map.put("Body", "Reminder: " + title);
         map.put("Sound", "Enabled");
         map.put("Time", timestamp);
         map.put("Title", title);
         map.put("Token", Token);
         map.put("Type", "Reminder");
+        map.put("UserID", userID);
         map.put("Status", "Pending");
         db.collection("notifications").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -249,6 +255,7 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
                 five_min.setBackground(getResources().getDrawable(R.drawable.five_min_button_selected));
                 selectedTypeOfReminder = "During";
                 time = "5 Min";
+//                scheduleNotification(getNotification("5 minutes delay"), 5000);
                 getTimeFromDuration(5);
                 break;
             case R.id.ten_min:
@@ -256,6 +263,7 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
                 ten_min.setBackground(getResources().getDrawable(R.drawable.ten_min_button_selected));
                 selectedTypeOfReminder = "During";
                 time = "10 Min";
+//                scheduleNotification(getNotification("10 minutes delay"), 10000*60);
                 getTimeFromDuration(10);
                 break;
             case R.id.half_hour:
@@ -263,6 +271,7 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
                 half_hour.setBackground(getResources().getDrawable(R.drawable.half_hour_button_selected));
                 selectedTypeOfReminder = "During";
                 time = "30 Min";
+//                scheduleNotification(getNotification("30 minutes delay"), 30000*60);
                 getTimeFromDuration(30);
                 break;
             case R.id.custom_time:
@@ -289,7 +298,10 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
 //                        eReminderTime.setText( selectedHour + ":" + selectedMinute);
                         selectedTypeOfReminder = "Custom";
                         time = selectedHour + ":" + selectedMinute;
-                        timestamp = year + "-" + month + "-" + day + " " + selectedHour + ":" + selectedMinute + ":00.000";
+                        String str_month = String.valueOf(month + 1);
+                        if(str_month.length() == 1)
+                            str_month = "0" + str_month;
+                        timestamp = year + "-" + str_month + "-" + day + " " + selectedHour + ":" + selectedMinute + ":00.000";
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -343,5 +355,25 @@ public class AddCustomHabit extends Fragment implements View.OnClickListener, Ti
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(getContext(), NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(getContext());
+        builder.setContentTitle("Scheduled Notification");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.ic_stat_ic_notification);
+        return builder.build();
     }
 }

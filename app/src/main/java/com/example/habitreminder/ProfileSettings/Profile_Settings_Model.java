@@ -3,10 +3,10 @@ package com.example.habitreminder.ProfileSettings;
 public class Profile_Settings_Model {
     String Name;
     String Description;
-    String Status;
+    Boolean Status;
     String Type;
 
-    public Profile_Settings_Model(String name, String description, String status, String type) {
+    public Profile_Settings_Model(String name, String description, Boolean status, String type) {
         Name = name;
         Description = description;
         Status = status;
@@ -29,11 +29,11 @@ public class Profile_Settings_Model {
         Description = description;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return Status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         Status = status;
     }
 

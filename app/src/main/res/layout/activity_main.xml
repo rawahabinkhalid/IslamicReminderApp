@@ -22,5 +22,75 @@
         android:layout_below="@+id/logo"
         android:id="@+id/slideViewPager">
     </androidx.viewpager.widget.ViewPager>
+    <RelativeLayout
+        android:id="@+id/rl_main_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="#fff"
+        android:paddingLeft="0dp"
+        android:paddingTop="20dp"
+        android:paddingRight="0dp">
 
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/body_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title_tv"
+            android:layout_marginLeft="5dp"
+            android:paddingTop="15dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="15dp"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/body_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_shape"
+                android:gravity="center"
+                android:text="Yes"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btn_no"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_shape"
+                android:gravity="center"
+                android:text="No"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

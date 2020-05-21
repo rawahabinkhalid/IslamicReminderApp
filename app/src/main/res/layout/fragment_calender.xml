@@ -1,105 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Calender.FragmentCalender"
-    android:background="@drawable/i_app_background">
-<RelativeLayout
-        android:orientation="vertical"
+    android:background="@drawable/i_app_background"
+    tools:context=".Calender.FragmentCalender">
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:background="#90E6F9E5"
+        android:orientation="vertical"
         android:paddingLeft="30dp"
+        android:paddingTop="20dp"
         android:paddingRight="30dp"
-        android:background="#90E6F9E5">
+        android:paddingBottom="20dp">
+
         <RelativeLayout
-            android:orientation="vertical"
             android:id="@+id/welcomeCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="@drawable/curve_border_white_background">
+            android:background="@drawable/curve_border_white_background"
+            android:orientation="vertical"
+            android:padding="10dp">
+
             <TextView
                 android:id="@+id/calender_heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/calender_heading"
-                android:textSize="26sp"
-                android:textColor="@color/onboarding_heading_color"/>
+                android:text="Calendar"
+                android:textColor="@color/onboarding_heading_color"
+                android:textSize="26sp" />
+
             <TextView
                 android:id="@+id/calender_sub_heading"
-                android:layout_below="@+id/calender_heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/calender_heading"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
-                android:textColor="@color/black_light"
-                android:text="@string/calender_main_sub_heading"/>
+                android:text="View our Calendar"
+                android:textColor="@color/black_light" />
+
             <Spinner
                 android:id="@+id/spinner_month"
-                android:layout_below="@id/calender_sub_heading"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"
+                android:layout_below="@id/calender_sub_heading"></Spinner>
+
             <Spinner
                 android:id="@+id/spinner_view"
-                android:layout_below="@id/calender_sub_heading"
-                android:layout_toRightOf="@+id/spinner_month"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"
+                android:layout_below="@id/calender_sub_heading"
+                android:layout_toRightOf="@+id/spinner_month"></Spinner>
         </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/welcomeCard"
-        android:background="@android:color/white">
-        <CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:theme="@style/CalenderViewCustom"
-            android:dateTextAppearance="@style/CalenderViewDateCustomText"
-            android:weekDayTextAppearance="@style/CalenderViewWeekCustomText">
-        </CalendarView>
-        <com.alamkanak.weekview.WeekView
-            android:id="@+id/weekView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:eventTextColor="@android:color/white"
-            app:textSize="10sp"
-            app:hourHeight="60dp"
-            app:headerColumnPadding="8dp"
-            app:headerColumnTextColor="#8f000000"
-            app:headerRowPadding="12dp"
-            app:columnGap="8dp"
-            app:noOfVisibleDays="5"
-            app:headerRowBackgroundColor="#ffefefef"
-            app:dayBackgroundColor="#05000000"
-            app:todayBackgroundColor="#1848adff"
-            app:headerColumnBackground="#ffffffff"
-            android:visibility="gone"/>
-        <com.alamkanak.weekview.WeekView
-            android:id="@+id/dayView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:eventTextColor="@android:color/white"
-            app:textSize="10sp"
-            app:hourHeight="60dp"
-            app:headerColumnPadding="8dp"
-            app:headerColumnTextColor="#8f000000"
-            app:headerRowPadding="12dp"
-            app:columnGap="8dp"
-            app:noOfVisibleDays="1"
-            app:headerRowBackgroundColor="#ffefefef"
-            app:dayBackgroundColor="#05000000"
-            app:todayBackgroundColor="#1848adff"
-            app:headerColumnBackground="#ffffffff"
-            android:visibility="gone"/>
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcomeCard"
+            android:background="@android:color/white">
+            <!--        <CalendarView-->
+            <com.applandeo.materialcalendarview.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+            <com.alamkanak.weekview.WeekView
+                android:id="@+id/weekView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:columnGap="8dp"
+                app:dayBackgroundColor="#05000000"
+                app:eventTextColor="@android:color/white"
+                app:headerColumnBackground="#ffffffff"
+                app:headerColumnPadding="8dp"
+                app:headerColumnTextColor="#8f000000"
+                app:headerRowBackgroundColor="#ffefefef"
+                app:headerRowPadding="12dp"
+                app:hourHeight="60dp"
+                app:noOfVisibleDays="5"
+                app:textSize="10sp"
+                app:todayBackgroundColor="#1848adff" />
+
+            <com.alamkanak.weekview.WeekView
+                android:id="@+id/dayView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:columnGap="8dp"
+                app:dayBackgroundColor="#05000000"
+                app:eventTextColor="@android:color/white"
+                app:headerColumnBackground="#ffffffff"
+                app:headerColumnPadding="8dp"
+                app:headerColumnTextColor="#8f000000"
+                app:headerRowBackgroundColor="#ffefefef"
+                app:headerRowPadding="12dp"
+                app:hourHeight="60dp"
+                app:noOfVisibleDays="1"
+                app:textSize="10sp"
+                app:todayBackgroundColor="#1848adff" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

@@ -4,14 +4,16 @@ public class ReminderData {
     private  String  Name;
     private String TypeOfReminder;
     private String Time;
+    private String DefaultDate;
 
     public ReminderData() {
     }
 
-    public ReminderData(String name, String typeOfReminder, String time) {
+    public ReminderData(String name, String typeOfReminder, String time, String defaultDate) {
         Name = name;
         TypeOfReminder = typeOfReminder;
         Time = time;
+        DefaultDate = defaultDate;
     }
 
     public String getName() {
@@ -36,5 +38,13 @@ public class ReminderData {
 
     public void setTime(String time) {
         Time = time;
+    }
+
+    public String getDefaultDate() {
+        return DefaultDate;
+    }
+
+    public void setDefaultDate(String defaultDate) {
+        DefaultDate = defaultDate;
     }
 }

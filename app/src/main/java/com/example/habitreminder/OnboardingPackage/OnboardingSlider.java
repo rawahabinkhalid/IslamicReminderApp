@@ -28,6 +28,15 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+
 public class OnboardingSlider extends AppCompatActivity {
 
     private OnboardPreferenceManager prefManager;
@@ -50,9 +59,17 @@ public class OnboardingSlider extends AppCompatActivity {
                 }
             }
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            String userID = mAuth.getCurrentUser().getUid();
-            setFirebaseToken(userID);
-            gotoHomeScreen();
+            if(mAuth == null) {
+                launchHomeScreen();
+            } else {
+                String userID = mAuth.getCurrentUser().getUid();
+                if (userID == null) {
+                    launchHomeScreen();
+                } else {
+                    setFirebaseToken(userID);
+                    gotoHomeScreen();
+                }
+            }
         } else if (!prefManager.isFirstTimeLaunch()) {
             launchHomeScreen();
         }
@@ -62,6 +79,7 @@ public class OnboardingSlider extends AppCompatActivity {
         onbordingSlider.setAdapter(sliderAdapter);
         onbordingSlider.addOnPageChangeListener(viewPagerPageChangeListener);
     }
+
     private void setFirebaseToken(final String id) {
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -71,14 +89,25 @@ public class OnboardingSlider extends AppCompatActivity {
                             Log.w(TAG, "getInstanceId failed", task.getException());
                             return;
                         }
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"),
+                                Locale.getDefault());
+                        Date currentLocalTime = calendar.getTime();
+                        DateFormat date = new SimpleDateFormat("z", Locale.getDefault());
+                        String localTime = date.format(currentLocalTime);
+                        localTime = localTime.split("GMT")[1];
 
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
                         db = FirebaseFirestore.getInstance();
                         DocumentReference dbRef = db.collection("users").document(id);
 
+                        Map<String, Object> map = new HashMap<>();
+
+                        map.put("token", token);
+                        map.put("GMT", localTime);
+
                         dbRef
-                                .update("token", token)
+                                .update(map)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {

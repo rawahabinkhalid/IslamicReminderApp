@@ -2,6 +2,7 @@ package com.example.habitreminder.ProfileSettings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +45,7 @@ public class Profile_Settings_Adapter extends RecyclerView.Adapter<Profile_Setti
     @Override
     public void onBindViewHolder(@NonNull Profile_Settings_Adapter.ViewHolder holder, final int position) {
         holder.profile_button_name.setText(profileExploreList.get(position).getName());
-
-        holder.profile_button.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
@@ -66,7 +66,12 @@ public class Profile_Settings_Adapter extends RecyclerView.Adapter<Profile_Setti
                 alertDialog.show();
 
             }
-        });
+        };
+        if (profileExploreList.get(position).getStatus()) {
+            holder.profile_button_name.setTextColor(context.getResources().getColor(R.color.black_light));
+            holder.profile_button.setOnClickListener(listener);
+            holder.profile_button_name.setOnClickListener(listener);
+        }
     }
 
     @Override

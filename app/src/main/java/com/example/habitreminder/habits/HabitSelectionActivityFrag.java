@@ -155,21 +155,22 @@ public class HabitSelectionActivityFrag extends Fragment implements View.OnClick
                         String notification = d.getString("Notification");
 
                         List<SubHabits> subHabits = new ArrayList<>();
-                        List<Map<String, Object>> s = (List<Map<String, Object>>) d.get("SubHabits");
-                        int index = 0;
-                        for (Map<String, Object> data : s) {
-                            Log.i("subHabitsData", String.valueOf(data));
-                            int frequencyAdvanced = Integer.parseInt(data.get("Frequency_Advanced").toString());
-                            int frequency_Beginner = Integer.parseInt(data.get("Frequency_Beginner").toString());
-                            int frequency_Intermediate = Integer.parseInt(data.get("Frequency_Intermediate").toString());
-                            String sub_name = data.get("Name").toString();
-                            String sub_notification = data.get("Notification").toString();
+                        if(d.get("SubHabits") != null) {
+                            List<Map<String, Object>> s = (List<Map<String, Object>>) d.get("SubHabits");
+                            int index = 0;
+                            for (Map<String, Object> data : s) {
+                                Log.i("subHabitsData", String.valueOf(data));
+                                int frequencyAdvanced = Integer.parseInt(data.get("Frequency_Advanced").toString());
+                                int frequency_Beginner = Integer.parseInt(data.get("Frequency_Beginner").toString());
+                                int frequency_Intermediate = Integer.parseInt(data.get("Frequency_Intermediate").toString());
+                                String sub_name = data.get("Name").toString();
+                                String sub_notification = data.get("Notification").toString();
 
-                            subHabits.add(new SubHabits(frequencyAdvanced, frequency_Beginner, frequency_Intermediate, String.valueOf(index), sub_name, sub_notification));
-                            index++;
+                                subHabits.add(new SubHabits(frequencyAdvanced, frequency_Beginner, frequency_Intermediate, String.valueOf(index), sub_name, sub_notification));
+                                index++;
+                            }
+                            habitData.add(new HabitsData(d.getId(), name, notification, subHabits));
                         }
-
-                        habitData.add(new HabitsData(d.getId(), name, notification, subHabits));
                     }
 
                 }

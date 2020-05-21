@@ -2,22 +2,34 @@ package com.example.habitreminder.userhome;
 
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+//import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener;
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.habitreminder.Adapters.ReminderAdapter;
 import com.example.habitreminder.Adapters.JournalAdapterHome;
+import com.example.habitreminder.Data.CalendarData;
 import com.example.habitreminder.Data.ReminderData;
 import com.example.habitreminder.Data.JournalData;
 import com.example.habitreminder.Journal.WriteJournal;
@@ -39,10 +51,18 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-public class FragmentHome extends Fragment  {
+public class FragmentHome extends Fragment {
     private String user;
     String uid;
     private Button addJournal, addReminder;
@@ -58,7 +78,7 @@ public class FragmentHome extends Fragment  {
 
     private FirebaseUser CurrentUser = mAuth.getCurrentUser();
 
-   public String userID;
+    public String userID;
 
     public JournalAdapterHome desAdapters;
     public ReminderAdapter reminderAdapter;
@@ -73,16 +93,38 @@ public class FragmentHome extends Fragment  {
     private Button reminder_button;
     private TextView journal_heading;
     private TextView journal_tasks;
+    private TextView calender_home_subhead;
     private Button journal_button;
 
-    public FragmentHome(){
+    private TextView record_total_days_numeric;
+    private TextView record_current_streak_numeric;
+    private TextView best_streak_days_numeric;
+    private TextView total_habits_done_numeric;
+
+    private TextView record_total_days_date;
+    private TextView record_current_streak_date;
+    private TextView best_streak_days_date;
+    private TextView total_habits_done_date;
+    private CalendarView calender_home;
+    public List<CalendarData> calendarDataList;
+    private ArrayList<String> description = new ArrayList<>();
+    private ArrayList<String> end_date = new ArrayList<>();
+    private ArrayList<String> start_date = new ArrayList<>();
+    private ArrayList<String> title = new ArrayList<>();
+    private String Locale = "%02d";
+    private String template = "dd/MM/yyyy";
+    private int month = -1;
+
+    public FragmentHome() {
 
     }
 
     Activity activity;
-    public FragmentHome(Activity activity){
-        this.activity =activity;
+
+    public FragmentHome(Activity activity) {
+        this.activity = activity;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         OnboardPreferenceManager oPms = new OnboardPreferenceManager(getContext());
@@ -91,7 +133,7 @@ public class FragmentHome extends Fragment  {
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
             if (acct != null) {
                 userID = acct.getId();
-                Log.d("isss",userID);
+                Log.d("isss", userID);
             }
         } else if (oPms.isFacebookSignIn()) {
 
@@ -108,7 +150,7 @@ public class FragmentHome extends Fragment  {
         final String userName = oPm.getUserName();
         //Toast.makeText(getContext(), userName.toString(), Toast.LENGTH_SHORT).show();
         View rootview = null;
-        rootview = inflater.inflate(R.layout.fragment_home, container,false);
+        rootview = inflater.inflate(R.layout.fragment_home, container, false);
         // journal data
         journalDataList = new ArrayList<>();
         myJournal_RV = (RecyclerView) rootview.findViewById(R.id.home_journalData);
@@ -123,20 +165,52 @@ public class FragmentHome extends Fragment  {
         record_current_streak = rootview.findViewById(R.id.record_current_streak);
         your_best_streak = rootview.findViewById(R.id.your_best_streak);
         total_habits_done = rootview.findViewById(R.id.total_habits_done);
+
+        record_total_days_numeric = rootview.findViewById(R.id.record_total_days_numeric);
+        record_current_streak_numeric = rootview.findViewById(R.id.record_current_streak_numeric);
+        best_streak_days_numeric = rootview.findViewById(R.id.best_streak_days_numeric);
+        total_habits_done_numeric = rootview.findViewById(R.id.total_habits_done_numeric);
+
+        record_total_days_date = rootview.findViewById(R.id.record_total_days_date);
+        record_current_streak_date = rootview.findViewById(R.id.record_current_streak_date);
+        best_streak_days_date = rootview.findViewById(R.id.best_streak_days_date);
+        total_habits_done_date = rootview.findViewById(R.id.total_habits_done_date);
+
         reminder_heading = rootview.findViewById(R.id.reminder_heading);
         reminder_button = rootview.findViewById(R.id.reminder_button);
         journal_heading = rootview.findViewById(R.id.journal_heading);
         journal_tasks = rootview.findViewById(R.id.journal_tasks);
         journal_button = rootview.findViewById(R.id.journal_button);
+        calender_home = rootview.findViewById(R.id.calender_home);
+        calender_home_subhead = rootview.findViewById(R.id.calender_home_subhead);
+        calender_home.setHeaderColor(R.color.white);
+        calender_home.setHeaderLabelColor(R.color.black);
+        calender_home.setForwardButtonImage(getResources().getDrawable(R.drawable.ic_navigate_next_black_24dp));
+        calender_home.setPreviousButtonImage(getResources().getDrawable(R.drawable.ic_navigate_before_black_24dp));
 
+        Calendar cal = Calendar.getInstance();
+
+        List<Calendar> calendars = new ArrayList<>();
+        calendars.add(cal);
+        cal.set(2020, 5, 7);
+        calendars.add(cal);
+        calender_home.setHighlightedDays(calendars);
+
+        cal = Calendar.getInstance();
+        month = cal.getTime().getMonth();
+        SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+        calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+
+        getHabitStatusForCalendar();
+        getCalendarData();
 
         fetchStringResources();
+        fetchRecordResources();
 
-         FirebaseFirestore db = FirebaseFirestore.getInstance();
-         CollectionReference addJournalRef = db.collection("users");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference addJournalRef = db.collection("users");
 
-
-        addJournalRef.document(userID).collection("AddJournal").orderBy("timestamp" , Query.Direction.DESCENDING).limit(2).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        addJournalRef.document(userID).collection("AddJournal").orderBy("timestamp", Query.Direction.DESCENDING).limit(2).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()) {
@@ -173,7 +247,7 @@ public class FragmentHome extends Fragment  {
         CollectionReference addHabits = db.collection("users");
 
 
-     addHabits.document(userID).collection("AddReminder").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        addHabits.document(userID).collection("AddReminder").orderBy("defaultDate", Query.Direction.DESCENDING).limit(2).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()) {
@@ -198,7 +272,7 @@ public class FragmentHome extends Fragment  {
             }
         });
         //add journal button
-       addJournal = (Button) rootview.findViewById(R.id.journal_button);
+        addJournal = (Button) rootview.findViewById(R.id.journal_button);
         addJournal.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 WriteJournal writeJournal = new WriteJournal(getActivity());
@@ -227,7 +301,7 @@ public class FragmentHome extends Fragment  {
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
             if (acct != null) {
                 personName = acct.getDisplayName();
-                welcomeuser.setText("Welcome,\n"+personName);
+                welcomeuser.setText("Welcome,\n" + personName);
 //                cPN.setUID(acct.getId());
             }
         } else if (oPm.isFacebookSignIn()) {
@@ -244,9 +318,9 @@ public class FragmentHome extends Fragment  {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Log.d("Data","DocumentSnapshot data: " + document.get("timestamp"));
+                            Log.d("Data", "DocumentSnapshot data: " + document.get("timestamp"));
                             personName = document.get("name").toString();
-                            welcomeuser.setText("Welcome,\n"+userName);
+                            welcomeuser.setText("Welcome,\n" + userName);
                         } else {
                             Log.d("Failed", "No such document");
                         }
@@ -259,6 +333,164 @@ public class FragmentHome extends Fragment  {
         }
 
         return rootview;
+    }
+
+    private void getHabitStatusForCalendar() {
+
+    }
+
+    private void getCalendarData() {
+        List<EventDay> events = new ArrayList<>();
+
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference calendarRef = db.collection("calendar/");
+
+
+        calendarRef.document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+//                    Log.i("documentCal", String.valueOf(document.get("events")));
+                    if (document.get("events") != null) {
+                        Map<String, ArrayList<String>> events_map = (Map<String, ArrayList<String>>) document.get("events");
+//                    for (Object o : events) {
+//                    Log.d("cal_value", "List element " + events.toString());
+                        for (Map.Entry<String, ArrayList<String>> entry : events_map.entrySet()) {
+                            if (entry.getKey().equals("end_date"))
+                                end_date = entry.getValue();
+                            else if (entry.getKey().equals("description"))
+                                description = entry.getValue();
+                            else if (entry.getKey().equals("title"))
+                                title = entry.getValue();
+                            else if (entry.getKey().equals("start_date"))
+                                start_date = entry.getValue();
+                        }
+
+                        int iter = 0;
+                        for (String d : title) {
+                            try {
+                                Date date1 = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a").parse(start_date.get(iter));
+                                SimpleDateFormat df = new SimpleDateFormat("yyyy");
+                                String year = df.format(date1);
+
+//                            Log.i("cal_value_data", Integer.parseInt(year) + " " + date1.getMonth() + " " + date1.getDate() + " " + date1.getHours() + " " + date1.getMinutes() + " " + date1.getSeconds());
+
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.set(Integer.parseInt(year), date1.getMonth(), date1.getDate(), date1.getHours(), date1.getMinutes(), date1.getSeconds());
+                                events.add(new EventDay(calendar, R.drawable.applogo));
+//                            events.add(new EventDay(calendar, R.drawable.applogo, Color.parseColor("#228B22")));
+                                calender_home.setEvents(events);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            iter++;
+                        }
+                    }
+                }
+            }
+        });
+
+        calender_home.setOnDayClickListener(new OnDayClickListener() {
+            @Override
+            public void onDayClick(EventDay eventDay) {
+                Calendar clickedDayCalendar = eventDay.getCalendar();
+                String selected_date = String.format(Locale, clickedDayCalendar.getTime().getDate());
+                selected_date += "/";
+                selected_date += String.format(Locale, clickedDayCalendar.getTime().getMonth() + 1);
+                selected_date += "/";
+                selected_date += String.valueOf(clickedDayCalendar.getTime().getYear() + 1900);
+                int iter = 0;
+                String events_selected_date = "";
+                try {
+                    Date date_selected = new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(selected_date);
+                    for (String d : title) {
+                        if (String.valueOf(date_selected).equals(String.valueOf(new SimpleDateFormat(template, java.util.Locale.ENGLISH).parse(start_date.get(iter))))) {
+                            events_selected_date += title.get(iter) + "\n";
+                            Toast.makeText(getContext(), events_selected_date, Toast.LENGTH_LONG).show();
+                        }
+                        iter++;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        calender_home.setOnPreviousPageChangeListener(new OnCalendarPageChangeListener() {
+            @Override
+            public void onChange() {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+                cal.set(Calendar.YEAR, month, 1);
+                cal.add(Calendar.MONTH, -1);
+                month--;
+                if (month < 0)
+                    month = 11;
+                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+            }
+        });
+        calender_home.setOnForwardPageChangeListener(new OnCalendarPageChangeListener() {
+            @Override
+            public void onChange() {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat simpleMonth = new SimpleDateFormat("MMMM");
+                cal.set(Calendar.YEAR, month, 1);
+                cal.add(Calendar.MONTH, 1);
+                month++;
+                if (month > 11)
+                    month = 0;
+                calender_home_subhead.setText(simpleMonth.format(cal.getTime()) + " - Nothing done yet");
+            }
+        });
+    }
+
+    private void fetchRecordResources() {
+        FirebaseFirestore dbMain = FirebaseFirestore.getInstance();
+        dbMain.collection("users").document(userID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.getResult() != null)
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot d = task.getResult();
+                                int Record1 = (d.get("Record1") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record1")));
+                                int Record2 = (d.get("Record2") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record2")));
+                                int Record3 = (d.get("Record3") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record3")));
+                                int Record4 = (d.get("Record4") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record4")));
+                                String Update_TimeStamp = (d.get("Update_TimeStamp") == null) ? "" : String.valueOf(d.get("Update_TimeStamp"));
+                                record_total_days_numeric.setText(String.valueOf(Record1));
+                                record_current_streak_numeric.setText(String.valueOf(Record2));
+                                best_streak_days_numeric.setText(String.valueOf(Record3));
+                                total_habits_done_numeric.setText(String.valueOf(Record4));
+                                if (!Update_TimeStamp.equals("")) {
+                                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                    LocalDateTime now = LocalDateTime.now();
+                                    String timestamp = dtf.format(now);
+                                    if (Update_TimeStamp.contains(timestamp)) {
+                                        Update_TimeStamp = Update_TimeStamp.replace(timestamp, "Today");
+                                    } else {
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.add(Calendar.DATE, -1);
+                                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                        String timestamp_yest = dateFormat.format(cal.getTime());
+                                        if (Update_TimeStamp.contains(timestamp_yest)) {
+                                            Update_TimeStamp = Update_TimeStamp.replace(timestamp_yest, "Yesterday");
+                                        }
+                                    }
+                                }
+                                record_total_days_date.setText(Update_TimeStamp);
+                                record_current_streak_date.setText(Update_TimeStamp);
+                                best_streak_days_date.setText(Update_TimeStamp);
+                                total_habits_done_date.setText(Update_TimeStamp);
+                            } else {
+                                Log.d("TagRecords", "Error getting documents: ", task.getException());
+                            }
+                    }
+                });
+
     }
 
     private void fetchStringResources() {

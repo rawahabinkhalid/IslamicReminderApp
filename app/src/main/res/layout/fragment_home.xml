@@ -61,6 +61,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/calender_home_subhead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
@@ -69,14 +70,15 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <CalendarView
+<!--            <CalendarView-->
+            <com.applandeo.materialcalendarview.CalendarView
                 android:id="@+id/calender_home"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:dateTextAppearance="@style/CalenderViewDateCustomText"
                 android:theme="@style/CalenderViewCustom"
-                android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"></CalendarView>
+                android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"/>
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -90,6 +92,9 @@
                     android:layout_marginLeft="20dp"
                     android:buttonTint="@color/calender"
                     android:text="@string/calender_radio_button_all_done"
+
+                    android:checked="true"
+                    android:enabled="false"
                     android:textColor="@color/black_light" />
 
                 <RadioButton
@@ -99,6 +104,7 @@
                     android:layout_marginLeft="30dp"
                     android:buttonTint="@color/calender"
                     android:text="@string/calender_radio_button_some_done"
+                    android:enabled="false"
                     android:textColor="@color/black_light" />
 
             </RadioGroup>
@@ -155,11 +161,12 @@
                         android:layout_marginRight="10dp"
                         android:paddingRight="5dp"
                         android:paddingBottom="5dp"
-                        android:text="27"
+                        android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="32sp"  />
+                        android:textSize="32sp" />
 
                     <TextView
+                        android:id="@+id/record_total_days_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/record_total_days_numeric"
@@ -197,11 +204,12 @@
                         android:layout_marginRight="10dp"
                         android:paddingRight="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@string/current_streak_numeric"
+                        android:text="0"
                         android:textColor="@color/black"
                         android:textSize="32sp" />
 
                     <TextView
+                        android:id="@+id/record_current_streak_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/record_current_streak_numeric"
@@ -239,11 +247,12 @@
                         android:layout_marginRight="10dp"
                         android:paddingRight="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@string/best_streak_days_numeric"
+                        android:text="0"
                         android:textColor="@color/black"
                         android:textSize="32sp" />
 
                     <TextView
+                        android:id="@+id/best_streak_days_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/best_streak_days_numeric"
@@ -281,11 +290,12 @@
                         android:layout_marginRight="10dp"
                         android:paddingRight="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@string/total_habits_done_numeric"
+                        android:text="0"
                         android:textColor="@color/black"
                         android:textSize="32sp" />
 
                     <TextView
+                        android:id="@+id/total_habits_done_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/total_habits_done_numeric"

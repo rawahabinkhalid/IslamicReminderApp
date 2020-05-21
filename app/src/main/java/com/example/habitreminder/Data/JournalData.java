@@ -5,6 +5,7 @@ public class JournalData extends ReminderData {
     private String jDescription;
     private String dateJournal;
     private String timestamp;
+    private String DefaultDate;
 
 
     public JournalData() {
@@ -15,6 +16,21 @@ public class JournalData extends ReminderData {
         this.dateJournal=dateJournal;
         this.timestamp = timestamp;
         }
+
+    public JournalData(String jDescription, String dateJournal, String timestamp, String defaultDate) {
+        this.jDescription = jDescription;
+        this.dateJournal = dateJournal;
+        this.timestamp = timestamp;
+        DefaultDate = defaultDate;
+    }
+
+    public JournalData(String name, String typeOfReminder, String time, String defaultDate, String jDescription, String dateJournal, String timestamp, String defaultDate1) {
+        super(name, typeOfReminder, time, defaultDate);
+        this.jDescription = jDescription;
+        this.dateJournal = dateJournal;
+        this.timestamp = timestamp;
+        DefaultDate = defaultDate1;
+    }
 
     public String getjDescription() {
         return jDescription;
