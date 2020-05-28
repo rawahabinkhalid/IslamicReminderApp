@@ -52,6 +52,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -104,6 +105,11 @@ public class FragmentProgress extends Fragment {
     private String template = "dd/MM/yyyy";
     private int month = -1;
 
+    private TextView record_total_days_date;
+    private TextView record_current_streak_date;
+    private TextView best_streak_days_date;
+    private TextView total_habits_done_date;
+
     public FragmentProgress() {
         // Required empty public constructor
     }
@@ -147,6 +153,10 @@ public class FragmentProgress extends Fragment {
         record_current_streak = Rootview.findViewById(R.id.record_current_streak);
         your_best_streak = Rootview.findViewById(R.id.your_best_streak);
         total_habits_done = Rootview.findViewById(R.id.total_habits_done);
+        record_total_days_date = Rootview.findViewById(R.id.record_total_days_date);
+        record_current_streak_date = Rootview.findViewById(R.id.record_current_streak_date);
+        best_streak_days_date = Rootview.findViewById(R.id.best_streak_days_date);
+        total_habits_done_date = Rootview.findViewById(R.id.total_habits_done_date);
 
         calender_home = Rootview.findViewById(R.id.calender_home);
         home_calender_heading = Rootview.findViewById(R.id.home_calender_heading);
@@ -341,6 +351,54 @@ public class FragmentProgress extends Fragment {
 
         pieChartStreaks.setData(data);
         pieChartStreaks.invalidate();
+    }
+
+    private void fetchRecordResources() {
+        FirebaseFirestore dbMain = FirebaseFirestore.getInstance();
+        dbMain.collection("users").document(userID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.getResult() != null)
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot d = task.getResult();
+                                int Record1 = (d.get("Record1") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record1")));
+                                int Record2 = (d.get("Record2") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record2")));
+                                int Record3 = (d.get("Record3") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record3")));
+                                int Record4 = (d.get("Record4") == null) ? 0 : Integer.parseInt(String.valueOf(d.get("Record4")));
+                                String Update_TimeStamp = (d.get("Update_TimeStamp") == null) ? "" : String.valueOf(d.get("Update_TimeStamp"));
+//                                record_total_days_numeric.setText(String.valueOf(Record1));
+//                                record_current_streak_numeric.setText(String.valueOf(Record2));
+//                                best_streak_days_numeric.setText(String.valueOf(Record3));
+//                                total_habits_done_numeric.setText(String.valueOf(Record4));
+                                if (!Update_TimeStamp.equals("")) {
+                                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                    LocalDateTime now = LocalDateTime.now();
+                                    String timestamp = dtf.format(now);
+                                    if (Update_TimeStamp.contains(timestamp)) {
+                                        Update_TimeStamp = Update_TimeStamp.replace(timestamp, "Today");
+                                    } else {
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.add(Calendar.DATE, -1);
+                                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                        String timestamp_yest = dateFormat.format(cal.getTime());
+                                        if (Update_TimeStamp.contains(timestamp_yest)) {
+                                            Update_TimeStamp = Update_TimeStamp.replace(timestamp_yest, "Yesterday");
+                                        }
+                                    }
+                                }
+                                record_total_days_date.setText(Update_TimeStamp);
+                                record_current_streak_date.setText(Update_TimeStamp);
+                                best_streak_days_date.setText(Update_TimeStamp);
+                                total_habits_done_date.setText(Update_TimeStamp);
+                            } else {
+                                Log.d("TagRecords", "Error getting documents: ", task.getException());
+                            }
+                    }
+                });
+
     }
 
     private void piechartmethod() {
