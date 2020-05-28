@@ -7,6 +7,7 @@
     android:paddingTop="20dp"
     android:paddingRight="30dp"
     android:paddingBottom="20dp"
+    android:id="@+id/main_container_habits"
     tools:context=".userhome.FragmentHome">
 
     <RelativeLayout
@@ -189,6 +190,7 @@
                 android:textStyle="bold"></TextView>
 
             <ImageButton
+                android:id="@+id/close_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"

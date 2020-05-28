@@ -3,6 +3,7 @@ package com.example.habitreminder.userhome;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 //import android.widget.CalendarView;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.habitreminder.Adapters.HomeScreen_Habits_Adapter;
 import com.example.habitreminder.Adapters.Main_Habits_Adapter;
 import com.example.habitreminder.Adapters.ReminderAdapter;
 import com.example.habitreminder.Adapters.JournalAdapterHome;
@@ -76,25 +80,15 @@ import java.util.List;
 import java.util.Map;
 
 public class FragmentHome extends Fragment {
-    private String user;
-    String uid;
-    private Button addJournal, addReminder;
+    private Button addJournal;
     private TextView welcomeuser;
     private String personName = "";
     String UID;
     private RecyclerView myJournal_RV;
-    private RecyclerView.LayoutManager layoutManager;
-
     public List<JournalData> journalDataList;
     public List<ReminderData> reminderDataList;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-    private FirebaseUser CurrentUser = mAuth.getCurrentUser();
-
     public String userID;
-
     public JournalAdapterHome desAdapters;
-    public ReminderAdapter reminderAdapter;
     private RecyclerView myHabits_RV;
     private TextView home_calender_heading;
     private TextView record_heading;
@@ -103,10 +97,8 @@ public class FragmentHome extends Fragment {
     private TextView your_best_streak;
     private TextView total_habits_done;
     private TextView reminder_heading;
-    private Button reminder_button;
     private TextView journal_heading;
     private TextView journal_tasks;
-    private TextView calender_home_subhead;
     private Button journal_button;
 
     private TextView record_total_days_numeric;
@@ -119,7 +111,6 @@ public class FragmentHome extends Fragment {
     private TextView best_streak_days_date;
     private TextView total_habits_done_date;
     private CalendarView calender_home;
-    public List<CalendarData> calendarDataList;
     private ArrayList<String> description = new ArrayList<>();
     private ArrayList<String> end_date = new ArrayList<>();
     private ArrayList<String> start_date = new ArrayList<>();
@@ -127,13 +118,15 @@ public class FragmentHome extends Fragment {
     private String Locale = "%02d";
     private String template = "dd/MM/yyyy";
     private int month = -1;
-    private Main_Habits_Adapter myHabitsAdaper;
+    private HomeScreen_Habits_Adapter myHabitsAdaper;
     private FirebaseFirestore db;
     PieChart pieChartStreaks;
     String streaks_completed_text;
     String currentStreak = "0";
     String bestStreak = "0";
     String streaks_completed_text_firebase = "";
+    //close button
+    private ImageButton close_button;
 
     public FragmentHome() {
 
@@ -178,6 +171,9 @@ public class FragmentHome extends Fragment {
         ll.setOrientation(LinearLayoutManager.VERTICAL);
         ll.setReverseLayout(true);
         myJournal_RV.setLayoutManager(ll);
+        //close button
+        close_button = rootview.findViewById(R.id.close_button);
+        RelativeLayout comming_soon = rootview.findViewById(R.id.comming_soon);
 
         home_calender_heading = rootview.findViewById(R.id.home_calender_heading);
         record_heading = rootview.findViewById(R.id.record_heading);
@@ -208,7 +204,12 @@ public class FragmentHome extends Fragment {
 //        calender_home.setHeaderLabelColor(R.color.black);
 //        calender_home.setForwardButtonImage(getResources().getDrawable(R.drawable.ic_navigate_next_black_24dp));
 //        calender_home.setPreviousButtonImage(getResources().getDrawable(R.drawable.ic_navigate_before_black_24dp));
-
+        close_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                comming_soon.setVisibility(View.GONE);
+            }
+        });
         Calendar cal = Calendar.getInstance();
 
         List<Calendar> calendars = new ArrayList<>();
@@ -424,7 +425,7 @@ public class FragmentHome extends Fragment {
 
 
     private void getHabitsAtHome() {
-        db.collection("habits/").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("habits/").limit(5).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<HabitsData> habitData = new ArrayList<>();
@@ -466,7 +467,7 @@ public class FragmentHome extends Fragment {
 
 //            }
 
-                myHabitsAdaper = new Main_Habits_Adapter(getActivity(), habitData);
+                myHabitsAdaper = new HomeScreen_Habits_Adapter(getActivity(), habitData);
                 myHabits_RV.setAdapter(myHabitsAdaper);
                 myHabitsAdaper.notifyDataSetChanged();
             }
