@@ -57,7 +57,7 @@ public class HomeScreen_Habits_Adapter extends RecyclerView.Adapter<HomeScreen_H
                     editor.putString("key_main", mData.get(position).getKey());
                     editor.commit();
                     FragmentTransaction fragmentTransaction = ((FragmentActivity) mContx).getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container_habits, new FragmentHome());
+                    fragmentTransaction.replace(R.id.main_container_habits, new AddFrequency());
                     fragmentTransaction.commit();
                 }
             });
@@ -76,7 +76,7 @@ public class HomeScreen_Habits_Adapter extends RecyclerView.Adapter<HomeScreen_H
 //                    editor.putString("key_main", mData.get(position).getKey());
 //                    editor.commit();
                     FragmentTransaction fragmentTransaction = ((FragmentActivity) mContx).getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container_habits, new FragmentHome());
+                    fragmentTransaction.replace(R.id.main_container_habits, new HabitSelectionActivityFrag());
                     fragmentTransaction.commit();
                 }
             });

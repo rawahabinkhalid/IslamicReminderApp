@@ -1,6 +1,8 @@
 package com.example.habitreminder.ProfileSettings;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.habitreminder.Data.Data;
 import com.example.habitreminder.OnboardingPackage.OnboardPreferenceManager;
 import com.example.habitreminder.R;
+import com.example.habitreminder.habits.HabitSelectionActivityFrag;
+import com.example.habitreminder.login.LoginActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,7 +49,7 @@ public class FragmentProfile_and_Settings extends Fragment {
     private String user;
     FirebaseFirestore db;
     String uid;
-    private TextView privacyButton;
+    private TextView privacyButton,tv_logout;
     TextView userName;
     TextView userEmail;
     TextView change_profile_name;
@@ -53,6 +58,7 @@ public class FragmentProfile_and_Settings extends Fragment {
     String personEmail = "";
     String UID = "";
     Data dt;
+
     OnboardPreferenceManager oPm;
     private FrameLayout mMainFrame;
     Fragment_Change_name change_name;
@@ -94,6 +100,7 @@ public class FragmentProfile_and_Settings extends Fragment {
         getProfileSettingsData();
 
         privacyButton = (TextView) Rootview.findViewById(R.id.tv_priacy_terms);
+        tv_logout = (TextView) Rootview.findViewById(R.id.tv_logout);
         change_name = new Fragment_Change_name();
         upgrade = new Fragment_upgrade_to_premium();
 
@@ -107,6 +114,17 @@ public class FragmentProfile_and_Settings extends Fragment {
                         .addToBackStack("privacy&terms")
                         .commit();
 
+            }
+        });
+        tv_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), LoginActivity.class);
+                i.putExtra("finish", true);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(i);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
+                getActivity().finish();
             }
         });
 

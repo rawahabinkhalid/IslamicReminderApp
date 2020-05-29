@@ -122,10 +122,11 @@ public class AddFrequency extends Fragment {
         Frequency_Advanced = sharedPreferences_Main.getString("Frequency_Advanced", "");
         Frequency_Intermediate = sharedPreferences_Main.getString("Frequency_Intermediate", "");
 
+
         SharedPreferences companyId = this.getActivity().getSharedPreferences("Token",
                 Context.MODE_PRIVATE);
         Token = companyId.getString("token", "");
-        heading_frequency.setText(subHabit_name);
+        heading_frequency.setText(mainHabits_name);
 
         //current user ID
         OnboardPreferenceManager oPm = new OnboardPreferenceManager(getContext());
