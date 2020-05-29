@@ -2,17 +2,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="30dp"
     android:paddingTop="20dp"
     android:paddingRight="30dp"
     android:paddingBottom="20dp"
     android:id="@+id/main_container_habits"
     tools:context=".userhome.FragmentHome">
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/welcomeCard"
@@ -30,12 +30,11 @@
                 android:textSize="26sp" />
 
 
-
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/streaksCompleted"
                 android:layout_width="match_parent"
                 android:layout_height="300sp"
-                android:padding="20dp"></com.github.mikephil.charting.charts.PieChart>
+                android:padding="20dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -326,5 +325,5 @@
                 android:background="@drawable/curve_button_green"
                 android:textSize="16sp" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

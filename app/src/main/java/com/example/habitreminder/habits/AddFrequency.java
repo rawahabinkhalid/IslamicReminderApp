@@ -149,7 +149,7 @@ public class AddFrequency extends Fragment {
     private void addListenerOnButton() {
 
         Frequency = "Beginner";
-        Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
+       // Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,15 +163,15 @@ public class AddFrequency extends Fragment {
 //                if (selectedId == 2131296596) {
                 if (radio_intermediate.isChecked()) {
                     Frequency = "Intermediate";
-                    Interval = getEstimatedIntervalFromFrequency(Frequency_Intermediate);
+                  //  Interval = getEstimatedIntervalFromFrequency(Frequency_Intermediate);
 //                } else if (selectedId == 2131296595) {
                 } else if (radio_beginner.isChecked()) {
                     Frequency = "Beginner";
-                    Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
+                   // Interval = getEstimatedIntervalFromFrequency(Frequency_Beginner);
                 } else if (radio_advance.isChecked()) {
 //                } else {
                     Frequency = "Advanced";
-                    Interval = getEstimatedIntervalFromFrequency(Frequency_Advanced);
+                   // Interval = getEstimatedIntervalFromFrequency(Frequency_Advanced);
                 }
                 if(radio_intermediate.isChecked() || radio_beginner.isChecked() || radio_advance.isChecked())
                     addNote();
@@ -217,9 +217,9 @@ public class AddFrequency extends Fragment {
 //
 //    }
 
-    private String getEstimatedIntervalFromFrequency(String Frequency) {
-        return Math.round(24 / Double.parseDouble(Frequency)) + " Hours";
-    }
+//    private String getEstimatedIntervalFromFrequency(String Frequency) {
+//        return Math.round(24 / Double.parseDouble(Frequency)) + " Hours";
+//    }
 
 
     private void addNote() {

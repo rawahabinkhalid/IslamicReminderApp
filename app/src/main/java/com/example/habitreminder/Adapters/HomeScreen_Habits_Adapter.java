@@ -18,6 +18,7 @@ import com.example.habitreminder.R;
 import com.example.habitreminder.habits.AddFrequency;
 import com.example.habitreminder.habits.HabitSelectionActivityFrag;
 import com.example.habitreminder.habits.Subhabits_Fragment;
+import com.example.habitreminder.userhome.FragmentHome;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class HomeScreen_Habits_Adapter extends RecyclerView.Adapter<HomeScreen_H
                     editor.putString("key_main", mData.get(position).getKey());
                     editor.commit();
                     FragmentTransaction fragmentTransaction = ((FragmentActivity) mContx).getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container_habits, new AddFrequency());
+                    fragmentTransaction.replace(R.id.main_container_habits, new FragmentHome());
                     fragmentTransaction.commit();
                 }
             });
@@ -75,7 +76,7 @@ public class HomeScreen_Habits_Adapter extends RecyclerView.Adapter<HomeScreen_H
 //                    editor.putString("key_main", mData.get(position).getKey());
 //                    editor.commit();
                     FragmentTransaction fragmentTransaction = ((FragmentActivity) mContx).getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container_habits, new HabitSelectionActivityFrag());
+                    fragmentTransaction.replace(R.id.main_container_habits, new FragmentHome());
                     fragmentTransaction.commit();
                 }
             });

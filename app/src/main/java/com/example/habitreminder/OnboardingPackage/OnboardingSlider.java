@@ -59,17 +59,23 @@ public class OnboardingSlider extends AppCompatActivity {
                 }
             }
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            if(mAuth == null) {
-                launchHomeScreen();
-            } else {
-                String userID = mAuth.getCurrentUser().getUid();
-                if (userID == null) {
-                    launchHomeScreen();
-                } else {
-                    setFirebaseToken(userID);
-                    gotoHomeScreen();
-                }
-            }
+            Log.i("mAuthhh" , String.valueOf(mAuth));
+           try {
+               if (mAuth == null) {
+                   launchHomeScreen();
+               } else {
+                   String userID = mAuth.getCurrentUser().getUid();
+                   if (userID == null) {
+                       launchHomeScreen();
+                   } else {
+                       setFirebaseToken(userID);
+                       gotoHomeScreen();
+                   }
+               }
+
+           }
+           catch (Exception e){}
+
         } else if (!prefManager.isFirstTimeLaunch()) {
             launchHomeScreen();
         }
